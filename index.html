@@ -208,6 +208,8 @@ html[data-lang="bn"] .timeline-tag{text-transform:none;}
 .contact-icon{width:40px;height:40px;border-radius:10px;background:var(--sage);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--forest);}
 .contact-item h4{font-size:0.95rem;color:var(--forest);margin-bottom:4px;}
 .contact-item p{font-size:0.9rem;color:#5a5d55;}
+.contact-item p a{color:var(--forest);text-decoration:underline;text-underline-offset:2px;}
+.contact-item p a:hover{color:var(--green);}
 .map-placeholder{border-radius:22px;min-height:340px;background:repeating-linear-gradient(45deg,#e7e2d2,#e7e2d2 10px,#ddd7c4 10px,#ddd7c4 20px);display:flex;align-items:center;justify-content:center;color:#8a8368;font-size:0.9rem;border:1px dashed #c9c1a4;}
 footer{background:var(--charcoal);color:var(--sage);padding:70px 0 30px;position:relative;overflow:hidden;}
 .footer-top{display:grid;grid-template-columns:1fr;gap:40px;margin-bottom:50px;}
@@ -648,13 +650,15 @@ html[data-lang="bn"] .footer-col h5{text-transform:none;}
     </div>
     <div class="contact-grid">
       <div class="reveal">
-        <div class="contact-item"><div class="contact-icon">📍</div><div><h4 data-i18n="contact.i1t">Project Location</h4><p data-i18n="contact.i1d">Location to be added</p></div></div>
-        <div class="contact-item"><div class="contact-icon">🏪</div><div><h4 data-i18n="contact.i2t">City Store</h4><p data-i18n="contact.i2d">Address to be added</p></div></div>
-        <div class="contact-item"><div class="contact-icon">📞</div><div><h4 data-i18n="contact.i3t">Phone</h4><p data-i18n="contact.i3d">+880 XX XXX XXXX</p></div></div>
-        <div class="contact-item"><div class="contact-icon">✉️</div><div><h4 data-i18n="contact.i4t">Email</h4><p data-i18n="contact.i4d">hello@qariatulihsan.org</p></div></div>
-        <div class="contact-item" style="border-bottom:none;"><div class="contact-icon">🕐</div><div><h4 data-i18n="contact.i5t">Visiting Hours</h4><p data-i18n="contact.i5d">Hours to be announced</p></div></div>
+        <div class="contact-item"><div class="contact-icon">📍</div><div><h4 data-i18n="contact.i1t">Project Location</h4><p><a href="https://maps.app.goo.gl/g3KAZZAMRfJCip5t8" target="_blank" rel="noopener" data-i18n="contact.i1d">View on Google Maps</a></p></div></div>
+        <div class="contact-item"><div class="contact-icon">🏪</div><div><h4 data-i18n="contact.i2t">City Store</h4><p><a href="https://maps.app.goo.gl/6Ar4CBxvQACfdoa37" target="_blank" rel="noopener" data-i18n="contact.i2d">View on Google Maps</a></p></div></div>
+        <div class="contact-item"><div class="contact-icon">📞</div><div><h4 data-i18n="contact.i3t">Phone</h4><p><a href="tel:+8801715004251">01715-004251</a></p></div></div>
+        <div class="contact-item"><div class="contact-icon">✉️</div><div><h4 data-i18n="contact.i4t">Email</h4><p><a href="mailto:qariatulihsan@gmail.com">qariatulihsan@gmail.com</a></p></div></div>
+        <div class="contact-item" style="border-bottom:none;"><div class="contact-icon">🕐</div><div><h4 data-i18n="contact.i5t">Visiting Hours</h4><p data-i18n="contact.i5d">9:00 AM – 10:00 PM (Store)</p></div></div>
       </div>
-      <div class="map-placeholder reveal reveal-delay-2" data-i18n="contact.mapPlaceholder">Map placeholder — location to be added</div>
+      <div class="map-placeholder reveal reveal-delay-2" style="padding:0;overflow:hidden;border:none;background:none;">
+        <iframe title="Qariatul Ihsan project location map" src="https://www.google.com/maps?q=24.5774862,88.3360765&z=15&output=embed" width="100%" height="340" style="border:0;border-radius:22px;" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
     </div>
   </div>
 </section>
@@ -755,12 +759,11 @@ en:{
  "tl.s4tag":"Stage 04","tl.s4t":"Self-Sustaining Village","tl.s4d":"Expanded agriculture, homes and a growing community.",
  "tl.s5tag":"Stage 05","tl.s5t":"Qariatul Ihsan","tl.s5d":"A complete living community, whole and self-sustained.",
  "contact.eyebrow":"Visit Us","contact.title":"Come see Qariatul Ihsan.",
- "contact.i1t":"Project Location","contact.i1d":"Location to be added",
- "contact.i2t":"City Store","contact.i2d":"Address to be added",
- "contact.i3t":"Phone","contact.i3d":"+880 XX XXX XXXX",
- "contact.i4t":"Email","contact.i4d":"hello@qariatulihsan.org",
- "contact.i5t":"Visiting Hours","contact.i5d":"Hours to be announced",
- "contact.mapPlaceholder":"Map placeholder — location to be added",
+ "contact.i1t":"Project Location","contact.i1d":"View on Google Maps",
+ "contact.i2t":"City Store","contact.i2d":"View on Google Maps",
+ "contact.i3t":"Phone","contact.i3d":"01715-004251",
+ "contact.i4t":"Email","contact.i4d":"qariatulihsan@gmail.com",
+ "contact.i5t":"Visiting Hours","contact.i5d":"9:00 AM – 10:00 PM (Store)",
  "footer.tag":"Faith. Nature. Community. A better way of living.",
  "footer.h1":"Explore","footer.h2":"Store","footer.h3":"Connect",
  "footer.s1":"Products","footer.s2":"From Our Land","footer.s3":"From Our Heritage",
@@ -826,12 +829,11 @@ bn:{
  "tl.s4tag":"ধাপ ০৪","tl.s4t":"স্বনির্ভর গ্রাম","tl.s4d":"বর্ধিত কৃষি, বাড়িঘর ও ক্রমবর্ধমান সম্প্রদায়।",
  "tl.s5tag":"ধাপ ০৫","tl.s5t":"কারিয়াতুল ইহসান","tl.s5d":"একটি সম্পূর্ণ, স্বনির্ভর জীবন্ত সম্প্রদায়।",
  "contact.eyebrow":"আমাদের সাথে দেখা করুন","contact.title":"কারিয়াতুল ইহসান দেখতে আসুন।",
- "contact.i1t":"প্রকল্পের অবস্থান","contact.i1d":"অবস্থান শীঘ্রই যোগ করা হবে",
- "contact.i2t":"শহরের দোকান","contact.i2d":"ঠিকানা শীঘ্রই যোগ করা হবে",
- "contact.i3t":"ফোন","contact.i3d":"+৮৮০ XX XXX XXXX",
- "contact.i4t":"ইমেইল","contact.i4d":"hello@qariatulihsan.org",
- "contact.i5t":"পরিদর্শনের সময়","contact.i5d":"সময় শীঘ্রই ঘোষণা করা হবে",
- "contact.mapPlaceholder":"মানচিত্র — অবস্থান শীঘ্রই যোগ করা হবে",
+ "contact.i1t":"প্রকল্পের অবস্থান","contact.i1d":"গুগল ম্যাপে দেখুন",
+ "contact.i2t":"শহরের দোকান","contact.i2d":"গুগল ম্যাপে দেখুন",
+ "contact.i3t":"ফোন","contact.i3d":"০১৭১৫-০০৪২৫১",
+ "contact.i4t":"ইমেইল","contact.i4d":"qariatulihsan@gmail.com",
+ "contact.i5t":"পরিদর্শনের সময়","contact.i5d":"সকাল ৯টা – রাত ১০টা (দোকান)",
  "footer.tag":"ঈমান। প্রকৃতি। সম্প্রদায়। জীবনযাপনের এক উত্তম পথ।",
  "footer.h1":"ঘুরে দেখুন","footer.h2":"দোকান","footer.h3":"যোগাযোগ",
  "footer.s1":"পণ্যসমূহ","footer.s2":"আমাদের জমি থেকে","footer.s3":"আমাদের ঐতিহ্য থেকে",
