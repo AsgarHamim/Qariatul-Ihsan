@@ -152,6 +152,13 @@ html[data-lang="bn"] .hero-eyebrow{letter-spacing:0.03em;text-transform:none;}
 html[data-lang="bn"] .philosophy-quote{font-style:normal;}
 .philosophy-values{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:44px;}
 .philosophy-value{padding:10px 20px;border-radius:999px;border:1px solid var(--sage);font-size:0.86rem;color:var(--brown);background:var(--ivory);}
+.scripture{margin-top:22px;max-width:620px;font-family:var(--font-display);font-style:italic;color:var(--forest);font-size:0.98rem;line-height:1.55;}
+.scripture .src{display:inline;margin-left:4px;font-family:var(--font-body);font-style:normal;font-size:0.74rem;letter-spacing:0.03em;color:var(--gold);white-space:nowrap;}
+html[data-lang="bn"] .scripture{font-style:normal;font-family:var(--font-display-bn);}
+html[data-lang="bn"] .scripture .src{font-family:var(--font-body-bn);letter-spacing:0.01em;}
+.hero-scripture{margin:-14px 0 34px;max-width:620px;font-family:var(--font-display);font-style:italic;color:var(--sage);font-size:1.05rem;line-height:1.5;opacity:0.95;}
+.hero-scripture .src{display:inline;margin-left:4px;font-family:var(--font-body);font-style:normal;font-size:0.72rem;letter-spacing:0.04em;color:var(--gold);opacity:0.95;white-space:nowrap;}
+html[data-lang="bn"] .hero-scripture{font-style:normal;font-family:var(--font-display-bn);}
 .store-split{display:grid;grid-template-columns:1fr;gap:24px;}
 @media(min-width:860px){.store-split{grid-template-columns:1fr 1fr;}}
 .store-card{position:relative;border-radius:24px;overflow:hidden;min-height:320px;display:flex;align-items:flex-end;padding:34px;color:#fff;}
@@ -365,6 +372,7 @@ html[data-lang="bn"] .footer-col h5{text-transform:none;}
       <div class="hero-eyebrow" data-i18n="hero.eyebrow">Faith · Nature · Community</div>
       <h1 data-i18n="hero.title">Qariatul Ihsan</h1>
       <p class="hero-sub" data-i18n="hero.sub">A living community rooted in faith, nature and self-sustained living.</p>
+      <p class="hero-scripture"><span data-i18n="scripture.hero">"Help one another in righteousness and piety."</span> <span class="src" data-i18n="scripture.heroSrc">— Surah Al-Ma'idah, 5:2</span></p>
       <div class="hero-actions">
         <a href="#about" class="btn btn-primary" data-i18n="hero.cta1">Explore Qariatul Ihsan</a>
         <a href="#community" class="btn btn-outline" data-i18n="hero.cta2">Our Vision</a>
@@ -379,6 +387,7 @@ html[data-lang="bn"] .footer-col h5{text-transform:none;}
       <div class="eyebrow" data-i18n="about.eyebrow">What is Qariatul Ihsan</div>
       <h2 data-i18n="about.title">Not a farm. Not a mosque. Not a village. A whole way of living.</h2>
       <p data-i18n="about.sub">Qariatul Ihsan is an evolving ecosystem bringing together faith, education, healthcare, agriculture, community and ethical commerce — grown from the land, rooted in Ihsan.</p>
+      <p class="scripture"><span data-i18n="scripture.about">"It is He who has made you successors upon the earth."</span> <span class="src" data-i18n="scripture.aboutSrc">— Surah Fatir, 35:39</span></p>
     </div>
     <div class="grid-6">
       <div class="pillar-card reveal reveal-delay-1"><div class="pillar-icon">🕌</div><h3 data-i18n="about.c1t">Mosque</h3><p data-i18n="about.c1d">The spiritual heart of the community, gathering people in prayer and remembrance.</p></div>
@@ -396,6 +405,7 @@ html[data-lang="bn"] .footer-col h5{text-transform:none;}
       <div class="eyebrow" data-i18n="begin.eyebrow">From a Small Beginning</div>
       <h2 data-i18n="begin.title">A small beginning, growing into a complete community.</h2>
       <p data-i18n="begin.sub">Today, Qariatul Ihsan is modest and real. Tomorrow, it becomes whole. Both matter.</p>
+      <p class="scripture"><span data-i18n="scripture.begin">"The most beloved of deeds to Allah are the most consistent, even if small."</span> <span class="src" data-i18n="scripture.beginSrc">— Bukhari</span></p>
     </div>
     <div class="tt-wrap">
       <div class="tt-today reveal">
@@ -471,6 +481,7 @@ html[data-lang="bn"] .footer-col h5{text-transform:none;}
           <div class="cycle-arrow">→</div>
           <div class="cycle-step"><div class="cycle-circle">🤲</div><span data-i18n="agri.cy5">Community</span></div>
         </div>
+        <p class="scripture"><span data-i18n="scripture.agri">"He it is who produces gardens… eat of their fruit when they ripen, and give its due on the day of harvest."</span> <span class="src" data-i18n="scripture.agriSrc">— Surah Al-An'am, 6:141</span></p>
       </div>
       <div class="reveal reveal-delay-2" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
         <div class="ph ph-tone-1" style="aspect-ratio:3/4;background-image:url('data:image/webp;base64,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');background-size:cover;background-position:center;"><div class="ph-label" data-i18n="agri.p1">Vegetables</div></div>
@@ -505,6 +516,7 @@ html[data-lang="bn"] .footer-col h5{text-transform:none;}
     <div class="section-heading reveal">
       <div class="eyebrow" data-i18n="animals.eyebrow">Animals &amp; Livestock</div>
       <h2 data-i18n="animals.title">Part of a living ecosystem, not just a farm.</h2>
+      <p class="scripture"><span data-i18n="scripture.animals">"Whoever is kind to God's creatures is kind to himself."</span> <span class="src" data-i18n="scripture.animalsSrc">— Abu Dawud 2858</span></p>
     </div>
     <div class="grid-4">
       <div class="animal-card ph ph-tone-1 reveal reveal-delay-1"><div class="ph-label" data-i18n="animals.a1">Goats</div></div>
@@ -537,6 +549,7 @@ html[data-lang="bn"] .footer-col h5{text-transform:none;}
     <div class="eyebrow" data-i18n="phil.eyebrow">The Meaning of Ihsan</div>
     <p class="philosophy-quote" data-i18n="phil.quote">"Ihsan means excellence, goodness, and doing what is beautiful."</p>
     <p style="max-width:560px;margin:0 auto;color:#5a5d55;" data-i18n="phil.sub">This spirit shapes every part of Qariatul Ihsan — how the land is cared for, how people are treated, and how the community is built.</p>
+    <p class="scripture" style="margin-left:auto;margin-right:auto;"><span data-i18n="scripture.phil">"Allah has prescribed excellence (ihsan) in all things."</span> <span class="src" data-i18n="scripture.philSrc">— Sahih Muslim 1955</span></p>
     <div class="philosophy-values">
       <span class="philosophy-value" data-i18n="phil.v1">Caring for people</span>
       <span class="philosophy-value" data-i18n="phil.v2">Caring for nature</span>
@@ -553,6 +566,7 @@ html[data-lang="bn"] .footer-col h5{text-transform:none;}
       <div class="eyebrow" data-i18n="store.eyebrow">Our Store</div>
       <h2 data-i18n="store.title">From our land to your home.</h2>
       <p data-i18n="store.sub">A city-based store connecting the land to the people — carrying what's grown here, and what's woven into Bangladesh's heritage.</p>
+      <p class="scripture"><span data-i18n="scripture.store">"Give full measure and weight in justice."</span> <span class="src" data-i18n="scripture.storeSrc">— Surah Al-An'am, 6:152</span></p>
     </div>
     <div class="store-split">
       <div class="store-card ph ph-tone-3 reveal reveal-delay-1" style="background-image:url('data:image/webp;base64,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');background-size:cover;background-position:center;">
@@ -647,6 +661,7 @@ html[data-lang="bn"] .footer-col h5{text-transform:none;}
     <div class="section-heading reveal">
       <div class="eyebrow" data-i18n="contact.eyebrow">Visit Us</div>
       <h2 data-i18n="contact.title">Come see Qariatul Ihsan.</h2>
+      <p class="scripture"><span data-i18n="scripture.contact">"Indeed, Allah commands you to render trusts to whom they are due."</span> <span class="src" data-i18n="scripture.contactSrc">— Surah An-Nisa, 4:58</span></p>
     </div>
     <div class="contact-grid">
       <div class="reveal">
@@ -764,6 +779,14 @@ en:{
  "contact.i3t":"Phone","contact.i3d":"01715-004251",
  "contact.i4t":"Email","contact.i4d":"qariatulihsan@gmail.com",
  "contact.i5t":"Visiting Hours","contact.i5d":"9:00 AM – 10:00 PM (Store)",
+ "scripture.hero":"\u201cHelp one another in righteousness and piety.\u201d","scripture.heroSrc":"— Surah Al-Ma'idah, 5:2",
+ "scripture.about":"\u201cIt is He who has made you successors upon the earth.\u201d","scripture.aboutSrc":"— Surah Fatir, 35:39",
+ "scripture.begin":"\u201cThe most beloved of deeds to Allah are the most consistent, even if small.\u201d","scripture.beginSrc":"— Bukhari",
+ "scripture.agri":"\u201cHe it is who produces gardens\u2026 eat of their fruit when they ripen, and give its due on the day of harvest.\u201d","scripture.agriSrc":"— Surah Al-An'am, 6:141",
+ "scripture.animals":"\u201cWhoever is kind to God's creatures is kind to himself.\u201d","scripture.animalsSrc":"— Abu Dawud 2858",
+ "scripture.phil":"\u201cAllah has prescribed excellence (ihsan) in all things.\u201d","scripture.philSrc":"— Sahih Muslim 1955",
+ "scripture.store":"\u201cGive full measure and weight in justice.\u201d","scripture.storeSrc":"— Surah Al-An'am, 6:152",
+ "scripture.contact":"\u201cIndeed, Allah commands you to render trusts to whom they are due.\u201d","scripture.contactSrc":"— Surah An-Nisa, 4:58",
  "footer.tag":"Faith. Nature. Community. A better way of living.",
  "footer.h1":"Explore","footer.h2":"Store","footer.h3":"Connect",
  "footer.s1":"Products","footer.s2":"From Our Land","footer.s3":"From Our Heritage",
@@ -811,6 +834,14 @@ bn:{
  "store.eyebrow":"আমাদের স্টোর","store.title":"আমাদের জমি থেকে আপনার ঘরে।","store.sub":"একটি শহরভিত্তিক দোকান জমি ও মানুষের মধ্যে সেতুবন্ধন তৈরি করে — এখানকার উৎপাদন এবং বাংলাদেশের ঐতিহ্যের পণ্য একসাথে নিয়ে আসে।",
  "store.c1t":"আমাদের জমি থেকে","store.c1d":"কারিয়াতুল ইহসানে উৎপাদিত ফল, সবজি ও কৃষিপণ্য।","store.c1btn":"পণ্য দেখুন",
  "store.c2t":"আমাদের ঐতিহ্য থেকে","store.c2d":"যত্নে তৈরি ঐতিহ্যবাহী বাংলাদেশি পোশাক ও সাংস্কৃতিক পণ্য।","store.c2btn":"পণ্য দেখুন",
+ "scripture.hero":"“সৎকর্ম ও তাকওয়ার কাজে একে অপরকে সাহায্য কর।”","scripture.heroSrc":"— সূরা আল-মায়িদাহ, ৫:২",
+ "scripture.about":"“তিনিই তোমাদের পৃথিবীতে স্থলাভিষিক্ত করেছেন।”","scripture.aboutSrc":"— সূরা ফাতির, ৩৫:৩৯",
+ "scripture.begin":"“আল্লাহর কাছে সবচেয়ে প্রিয় আমল তা-ই, যা নিয়মিত করা হয়, যদিও তা অল্প হয়।”","scripture.beginSrc":"— বুখারী",
+ "scripture.agri":"“তিনিই বাগান সৃষ্টি করেছেন… তোমরা তার ফল খাও যখন তা পাকে, এবং ফসল তোলার দিনে তার হক আদায় কর।”","scripture.agriSrc":"— সূরা আল-আনআম, ৬:১৪১",
+ "scripture.animals":"“যে আল্লাহর সৃষ্টির প্রতি দয়ালু, সে নিজের প্রতিই দয়ালু।”","scripture.animalsSrc":"— আবু দাউদ ২৮৫৮",
+ "scripture.phil":"“আল্লাহ প্রতিটি বিষয়ে ইহসান (উৎকর্ষতা) অবলম্বন করা ফরয করেছেন।”","scripture.philSrc":"— সহীহ মুসলিম ১৯৫৫",
+ "scripture.store":"“ন্যায্যভাবে মাপ ও ওজন পূর্ণ কর।”","scripture.storeSrc":"— সূরা আল-আনআম, ৬:১৫২",
+ "scripture.contact":"“নিশ্চয় আল্লাহ তোমাদের আদেশ দিচ্ছেন যে, আমানত তার হকদারদের কাছে পৌঁছে দাও।”","scripture.contactSrc":"— সূরা আন-নিসা, ৪:৫৮",
  "products.eyebrow":"পণ্য প্রদর্শনী","products.title":"আমাদের উৎপাদনের একটি ঝলক।","products.price":"মূল্য জানতে যোগাযোগ করুন","products.view":"পণ্য দেখুন",
  "products.cat1":"আমাদের জমি থেকে","products.cat2":"আমাদের ঐতিহ্য থেকে",
  "products.p1t":"মৌসুমি সবজি","products.p1d":"মাঠ থেকে সরাসরি সংগ্রহ করা তাজা সবজি।",
