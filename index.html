@@ -136,8 +136,12 @@ html[data-lang="bn"] .hero-eyebrow{letter-spacing:0.03em;text-transform:none;}
 .river-tag{padding:8px 16px;border-radius:999px;border:1px solid rgba(255,255,255,0.35);font-size:0.82rem;}
 .grid-4{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
 @media(min-width:768px){.grid-4{grid-template-columns:repeat(4,1fr);}}
-.animal-card{border-radius:18px;overflow:hidden;aspect-ratio:4/5;position:relative;}
-.animal-card .ph-label{font-size:0.95rem;font-family:var(--font-display);}
+  .animal-showcase{position:relative;overflow:hidden;border-radius:22px;aspect-ratio:16/9;margin:0;box-shadow:0 18px 46px rgba(23,52,27,0.14);background:var(--forest);}
+  .animal-showcase img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .7s ease;}
+  .animal-showcase::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(9,30,14,0.72) 0%,rgba(9,30,14,0.08) 46%,transparent 68%);pointer-events:none;}
+  .animal-showcase:hover img{transform:scale(1.018);}
+  .animal-showcase figcaption{position:absolute;z-index:1;left:clamp(18px,3vw,34px);right:clamp(18px,3vw,34px);bottom:clamp(16px,3vw,30px);color:#fff;font-family:var(--font-display);font-size:clamp(1.05rem,2vw,1.45rem);letter-spacing:.02em;}
+  @media(max-width:640px){.animal-showcase{aspect-ratio:4/3;}.animal-showcase img{object-position:42% center;}}
 .future-grid{display:grid;grid-template-columns:1fr;gap:24px;}
 @media(min-width:768px){.future-grid{grid-template-columns:repeat(2,1fr);}}
 @media(min-width:1200px){.future-grid{grid-template-columns:repeat(3,1fr);}}
@@ -215,8 +219,6 @@ html[data-lang="bn"] .timeline-tag{text-transform:none;}
 .contact-icon{width:40px;height:40px;border-radius:10px;background:var(--sage);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--forest);}
 .contact-item h4{font-size:0.95rem;color:var(--forest);margin-bottom:4px;}
 .contact-item p{font-size:0.9rem;color:#5a5d55;}
-.contact-item p a{color:var(--forest);text-decoration:underline;text-underline-offset:2px;}
-.contact-item p a:hover{color:var(--green);}
 .map-placeholder{border-radius:22px;min-height:340px;background:repeating-linear-gradient(45deg,#e7e2d2,#e7e2d2 10px,#ddd7c4 10px,#ddd7c4 20px);display:flex;align-items:center;justify-content:center;color:#8a8368;font-size:0.9rem;border:1px dashed #c9c1a4;}
 footer{background:var(--charcoal);color:var(--sage);padding:70px 0 30px;position:relative;overflow:hidden;}
 .footer-top{display:grid;grid-template-columns:1fr;gap:40px;margin-bottom:50px;}
@@ -330,7 +332,7 @@ html[data-lang="bn"] .footer-col h5{text-transform:none;}
   <div class="container nav-inner">
     <a href="#home" class="nav-logo">
       <img src="data:image/webp;base64,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" alt="Qariatul Ihsan logo" style="height:42px;width:auto;">
-      <span class="nav-logo-text">Qariatul Ihsan</span>
+      <span class="nav-logo-text" data-i18n="brand.name">Qariatul Ihsan</span>
     </a>
     <div class="nav-links">
       <a href="#home" class="nav-link" data-i18n="nav.home">Home</a>
@@ -338,7 +340,7 @@ html[data-lang="bn"] .footer-col h5{text-transform:none;}
       <a href="#land" class="nav-link" data-i18n="nav.land">Our Land</a>
       <a href="#agriculture" class="nav-link" data-i18n="nav.agri">Agriculture</a>
       <a href="#community" class="nav-link" data-i18n="nav.community">Community</a>
-      <a href="#store" class="nav-link" data-i18n="nav.store">Store</a>
+      <a href="html/store.html" class="nav-link" data-i18n="nav.store">Store</a>
       <a href="#journal" class="nav-link" data-i18n="nav.stories">Stories</a>
       <a href="#gallery" class="nav-link" data-i18n="nav.gallery">Gallery</a>
       <a href="#contact" class="nav-link" data-i18n="nav.contact">Contact</a>
@@ -360,7 +362,7 @@ html[data-lang="bn"] .footer-col h5{text-transform:none;}
   <a href="#land" data-i18n="nav.land">Our Land</a>
   <a href="#agriculture" data-i18n="nav.agri">Agriculture</a>
   <a href="#community" data-i18n="nav.community">Community</a>
-  <a href="#store" data-i18n="nav.store">Store</a>
+  <a href="html/store.html" data-i18n="nav.store">Store</a>
   <a href="#journal" data-i18n="nav.stories">Stories</a>
   <a href="#gallery" data-i18n="nav.gallery">Gallery</a>
   <a href="#contact" data-i18n="nav.contact">Contact</a>
@@ -518,12 +520,10 @@ html[data-lang="bn"] .footer-col h5{text-transform:none;}
       <h2 data-i18n="animals.title">Part of a living ecosystem, not just a farm.</h2>
       <p class="scripture"><span data-i18n="scripture.animals">"Whoever is kind to God's creatures is kind to himself."</span> <span class="src" data-i18n="scripture.animalsSrc">— Abu Dawud 2858</span></p>
     </div>
-    <div class="grid-4">
-      <div class="animal-card ph ph-tone-1 reveal reveal-delay-1"><div class="ph-label" data-i18n="animals.a1">Goats</div></div>
-      <div class="animal-card ph ph-tone-2 reveal reveal-delay-2"><div class="ph-label" data-i18n="animals.a2">Chickens</div></div>
-      <div class="animal-card ph ph-tone-4 reveal reveal-delay-3"><div class="ph-label" data-i18n="animals.a3">Ducks</div></div>
-      <div class="animal-card ph ph-tone-3 reveal reveal-delay-4"><div class="ph-label" data-i18n="animals.a4">Fish</div></div>
-    </div>
+    <figure class="animal-showcase reveal reveal-delay-1">
+      <img src="livestock-collage-2k.png" alt="Chickens and ducks at Qariatul Ihsan's farm" loading="lazy" decoding="async">
+      <figcaption data-i18n="animals.combined">Our livestock at Qariatul Ihsan</figcaption>
+    </figure>
   </div>
 </section>
 <section class="section bg-forest" id="community">
@@ -560,7 +560,7 @@ html[data-lang="bn"] .footer-col h5{text-transform:none;}
     </div>
   </div>
 </section>
-<section class="section bg-cream" id="store">
+<section class="section bg-cream" id="store" hidden aria-hidden="true">
   <div class="container">
     <div class="section-heading reveal">
       <div class="eyebrow" data-i18n="store.eyebrow">Our Store</div>
@@ -667,12 +667,12 @@ html[data-lang="bn"] .footer-col h5{text-transform:none;}
       <div class="reveal">
         <div class="contact-item"><div class="contact-icon">📍</div><div><h4 data-i18n="contact.i1t">Project Location</h4><p><a href="https://maps.app.goo.gl/g3KAZZAMRfJCip5t8" target="_blank" rel="noopener" data-i18n="contact.i1d">View on Google Maps</a></p></div></div>
         <div class="contact-item"><div class="contact-icon">🏪</div><div><h4 data-i18n="contact.i2t">City Store</h4><p><a href="https://maps.app.goo.gl/6Ar4CBxvQACfdoa37" target="_blank" rel="noopener" data-i18n="contact.i2d">View on Google Maps</a></p></div></div>
-        <div class="contact-item"><div class="contact-icon">📞</div><div><h4 data-i18n="contact.i3t">Phone</h4><p><a href="tel:+8801715004251">01715-004251</a></p></div></div>
-        <div class="contact-item"><div class="contact-icon">✉️</div><div><h4 data-i18n="contact.i4t">Email</h4><p><a href="mailto:qariatulihsan@gmail.com">qariatulihsan@gmail.com</a></p></div></div>
+        <div class="contact-item"><div class="contact-icon">📞</div><div><h4 data-i18n="contact.i3t">Phone</h4><p><a href="tel:+8801715004251" data-i18n="contact.i3d">01715-004251</a></p></div></div>
+        <div class="contact-item"><div class="contact-icon">✉️</div><div><h4 data-i18n="contact.i4t">Email</h4><p><a href="mailto:qariatulihsan@gmail.com" data-i18n="contact.i4d">qariatulihsan@gmail.com</a></p></div></div>
         <div class="contact-item" style="border-bottom:none;"><div class="contact-icon">🕐</div><div><h4 data-i18n="contact.i5t">Visiting Hours</h4><p data-i18n="contact.i5d">9:00 AM – 10:00 PM (Store)</p></div></div>
       </div>
       <div class="map-placeholder reveal reveal-delay-2" style="padding:0;overflow:hidden;border:none;background:none;">
-        <iframe title="Qariatul Ihsan project location map" src="https://www.google.com/maps?q=24.5774862,88.3360765&z=15&output=embed" width="100%" height="340" style="border:0;border-radius:22px;" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe title="Qariatul Ihsan project location map" src="https://www.google.com/maps?q=24.5774862,88.3360765&amp;z=15&amp;output=embed" width="100%" height="340" style="border:0;border-radius:22px;" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
   </div>
@@ -694,8 +694,8 @@ html[data-lang="bn"] .footer-col h5{text-transform:none;}
       <div class="footer-col">
         <h5 data-i18n="footer.h2">Store</h5>
         <a href="#products" data-i18n="footer.s1">Products</a>
-        <a href="#store" data-i18n="footer.s2">From Our Land</a>
-        <a href="#store" data-i18n="footer.s3">From Our Heritage</a>
+        <a href="#products" data-i18n="footer.s2">From Our Land</a>
+        <a href="#products" data-i18n="footer.s3">From Our Heritage</a>
       </div>
       <div class="footer-col">
         <h5 data-i18n="footer.h3">Connect</h5>
@@ -713,9 +713,11 @@ html[data-lang="bn"] .footer-col h5{text-transform:none;}
     </div>
   </div>
 </footer>
+<script src="cms-runtime.js"></script>
 <script>
 const dict = {
 en:{
+ "brand.name":"Qariatul Ihsan",
  "nav.home":"Home","nav.about":"About","nav.land":"Our Land","nav.agri":"Agriculture","nav.community":"Community","nav.store":"Store","nav.stories":"Stories","nav.gallery":"Gallery","nav.contact":"Contact",
  "hero.eyebrow":"Faith · Nature · Community","hero.title":"Qariatul Ihsan","hero.sub":"A living community rooted in faith, nature and self-sustained living.","hero.cta1":"Explore Qariatul Ihsan","hero.cta2":"Our Vision","hero.scroll":"Scroll",
  "about.eyebrow":"What is Qariatul Ihsan","about.title":"Not a farm. Not a mosque. Not a village. A whole way of living.","about.sub":"Qariatul Ihsan is an evolving ecosystem bringing together faith, education, healthcare, agriculture, community and ethical commerce — grown from the land, rooted in Ihsan.",
@@ -743,7 +745,7 @@ en:{
  "agri.p1":"Vegetables","agri.p2":"Fruits","agri.p3":"Crops","agri.p4":"Fish",
  "river.eyebrow":"Pond & Nature","river.title":"Life gathers at Qariatul Ihsan's pond.","river.sub":"A natural pond sits at the heart of the land — holding fish, feeding the soil, and shaping the biodiversity around it.",
  "river.tag1":"Pond","river.tag2":"Fish","river.tag3":"Water","river.tag4":"Trees","river.tag5":"Fields","river.tag6":"Biodiversity",
- "animals.eyebrow":"Animals & Livestock","animals.title":"Part of a living ecosystem, not just a farm.","animals.a1":"Goats","animals.a2":"Chickens","animals.a3":"Ducks","animals.a4":"Fish",
+ "animals.eyebrow":"Animals & Livestock","animals.title":"Part of a living ecosystem, not just a farm.","animals.combined":"Our livestock at Qariatul Ihsan","animals.a1":"Goats","animals.a2":"Chickens","animals.a3":"Ducks","animals.a4":"Fish",
  "future.eyebrow":"Our Future Community","future.title":"A community built with Ihsan.","future.sub":"This is the vision Qariatul Ihsan is growing toward — not yet built, but clearly imagined.",
  "future.c1t":"Mosque","future.c1d":"A spiritual center for the community.",
  "future.c2t":"Madrasa","future.c2d":"A place for knowledge and Islamic education.",
@@ -779,14 +781,15 @@ en:{
  "contact.i3t":"Phone","contact.i3d":"01715-004251",
  "contact.i4t":"Email","contact.i4d":"qariatulihsan@gmail.com",
  "contact.i5t":"Visiting Hours","contact.i5d":"9:00 AM – 10:00 PM (Store)",
- "scripture.hero":"\u201cHelp one another in righteousness and piety.\u201d","scripture.heroSrc":"— Surah Al-Ma'idah, 5:2",
- "scripture.about":"\u201cIt is He who has made you successors upon the earth.\u201d","scripture.aboutSrc":"— Surah Fatir, 35:39",
- "scripture.begin":"\u201cThe most beloved of deeds to Allah are the most consistent, even if small.\u201d","scripture.beginSrc":"— Bukhari",
- "scripture.agri":"\u201cHe it is who produces gardens\u2026 eat of their fruit when they ripen, and give its due on the day of harvest.\u201d","scripture.agriSrc":"— Surah Al-An'am, 6:141",
- "scripture.animals":"\u201cWhoever is kind to God's creatures is kind to himself.\u201d","scripture.animalsSrc":"— Abu Dawud 2858",
- "scripture.phil":"\u201cAllah has prescribed excellence (ihsan) in all things.\u201d","scripture.philSrc":"— Sahih Muslim 1955",
- "scripture.store":"\u201cGive full measure and weight in justice.\u201d","scripture.storeSrc":"— Surah Al-An'am, 6:152",
- "scripture.contact":"\u201cIndeed, Allah commands you to render trusts to whom they are due.\u201d","scripture.contactSrc":"— Surah An-Nisa, 4:58",
+ "contact.mapPlaceholder":"Map placeholder — location to be added",
+ "scripture.hero":"“Help one another in righteousness and piety.”","scripture.heroSrc":"— Surah Al-Ma'idah, 5:2",
+ "scripture.about":"“It is He who has made you successors upon the earth.”","scripture.aboutSrc":"— Surah Fatir, 35:39",
+ "scripture.begin":"“The most beloved of deeds to Allah are the most consistent, even if small.”","scripture.beginSrc":"— Bukhari",
+ "scripture.agri":"“He it is who produces gardens… eat of their fruit when they ripen, and give its due on the day of harvest.”","scripture.agriSrc":"— Surah Al-An'am, 6:141",
+ "scripture.animals":"“Whoever is kind to God's creatures is kind to himself.”","scripture.animalsSrc":"— Abu Dawud 2858",
+ "scripture.phil":"“Allah has prescribed excellence (ihsan) in all things.”","scripture.philSrc":"— Sahih Muslim 1955",
+ "scripture.store":"“Give full measure and weight in justice.”","scripture.storeSrc":"— Surah Al-An'am, 6:152",
+ "scripture.contact":"“Indeed, Allah commands you to render trusts to whom they are due.”","scripture.contactSrc":"— Surah An-Nisa, 4:58",
  "footer.tag":"Faith. Nature. Community. A better way of living.",
  "footer.h1":"Explore","footer.h2":"Store","footer.h3":"Connect",
  "footer.s1":"Products","footer.s2":"From Our Land","footer.s3":"From Our Heritage",
@@ -794,6 +797,7 @@ en:{
  "footer.copy":"© 2026 Qariatul Ihsan. All rights reserved."
 },
 bn:{
+ "brand.name":"কারিয়াতুল ইহসান",
  "nav.home":"হোম","nav.about":"পরিচিতি","nav.land":"আমাদের জমি","nav.agri":"কৃষি","nav.community":"সম্প্রদায়","nav.store":"দোকান","nav.stories":"গল্প","nav.gallery":"গ্যালারি","nav.contact":"যোগাযোগ",
  "hero.eyebrow":"ঈমান · প্রকৃতি · সম্প্রদায়","hero.title":"কারিয়াতুল ইহসান","hero.sub":"ঈমান, প্রকৃতি ও স্বনির্ভর জীবনব্যবস্থার একটি জীবন্ত সম্প্রদায়।","hero.cta1":"কারিয়াতুল ইহসান ঘুরে দেখুন","hero.cta2":"আমাদের লক্ষ্য","hero.scroll":"স্ক্রল করুন",
  "about.eyebrow":"কারিয়াতুল ইহসান কী","about.title":"শুধু একটি খামার, মসজিদ বা গ্রাম নয় — একটি সম্পূর্ণ জীবনব্যবস্থা।","about.sub":"কারিয়াতুল ইহসান একটি ক্রমবর্ধমান বাস্তুতন্ত্র, যেখানে ঈমান, শিক্ষা, স্বাস্থ্যসেবা, কৃষি, সম্প্রদায় ও নৈতিক বাণিজ্য এক সূত্রে গাঁথা।",
@@ -821,7 +825,7 @@ bn:{
  "agri.p1":"সবজি","agri.p2":"ফল","agri.p3":"ফসল","agri.p4":"মাছ",
  "river.eyebrow":"পুকুর ও প্রকৃতি","river.title":"কারিয়াতুল ইহসানের পুকুরকে ঘিরে জড়ো হয় জীবনের ছোঁয়া।","river.sub":"জমির কেন্দ্রে থাকা একটি প্রাকৃতিক পুকুর — মাছ ধারণ করে, মাটি পুষ্ট করে, চারপাশের জীববৈচিত্র্য গড়ে তোলে।",
  "river.tag1":"পুকুর","river.tag2":"মাছ","river.tag3":"জল","river.tag4":"গাছ","river.tag5":"মাঠ","river.tag6":"জীববৈচিত্র্য",
- "animals.eyebrow":"পশুপাখি","animals.title":"শুধু খামার নয়, একটি জীবন্ত বাস্তুতন্ত্রের অংশ।","animals.a1":"ছাগল","animals.a2":"মুরগি","animals.a3":"হাঁস","animals.a4":"মাছ",
+ "animals.eyebrow":"পশুপাখি","animals.title":"শুধু খামার নয়, একটি জীবন্ত বাস্তুতন্ত্রের অংশ।","animals.combined":"কারিয়াতুল ইহসানের পশুপাখি","animals.a1":"ছাগল","animals.a2":"মুরগি","animals.a3":"হাঁস","animals.a4":"মাছ",
  "future.eyebrow":"আমাদের ভবিষ্যৎ সম্প্রদায়","future.title":"ইহসানের সাথে গড়া একটি সম্প্রদায়।","future.sub":"এটিই সেই লক্ষ্য যার দিকে কারিয়াতুল ইহসান এগিয়ে চলেছে — এখনো নির্মিত না হলেও স্পষ্ট কল্পনায় আঁকা।",
  "future.c1t":"মসজিদ","future.c1d":"সম্প্রদায়ের আধ্যাত্মিক কেন্দ্র।",
  "future.c2t":"মাদ্রাসা","future.c2d":"জ্ঞান ও ইসলামি শিক্ষার স্থান।",
@@ -834,14 +838,6 @@ bn:{
  "store.eyebrow":"আমাদের স্টোর","store.title":"আমাদের জমি থেকে আপনার ঘরে।","store.sub":"একটি শহরভিত্তিক দোকান জমি ও মানুষের মধ্যে সেতুবন্ধন তৈরি করে — এখানকার উৎপাদন এবং বাংলাদেশের ঐতিহ্যের পণ্য একসাথে নিয়ে আসে।",
  "store.c1t":"আমাদের জমি থেকে","store.c1d":"কারিয়াতুল ইহসানে উৎপাদিত ফল, সবজি ও কৃষিপণ্য।","store.c1btn":"পণ্য দেখুন",
  "store.c2t":"আমাদের ঐতিহ্য থেকে","store.c2d":"যত্নে তৈরি ঐতিহ্যবাহী বাংলাদেশি পোশাক ও সাংস্কৃতিক পণ্য।","store.c2btn":"পণ্য দেখুন",
- "scripture.hero":"“সৎকর্ম ও তাকওয়ার কাজে একে অপরকে সাহায্য কর।”","scripture.heroSrc":"— সূরা আল-মায়িদাহ, ৫:২",
- "scripture.about":"“তিনিই তোমাদের পৃথিবীতে স্থলাভিষিক্ত করেছেন।”","scripture.aboutSrc":"— সূরা ফাতির, ৩৫:৩৯",
- "scripture.begin":"“আল্লাহর কাছে সবচেয়ে প্রিয় আমল তা-ই, যা নিয়মিত করা হয়, যদিও তা অল্প হয়।”","scripture.beginSrc":"— বুখারী",
- "scripture.agri":"“তিনিই বাগান সৃষ্টি করেছেন… তোমরা তার ফল খাও যখন তা পাকে, এবং ফসল তোলার দিনে তার হক আদায় কর।”","scripture.agriSrc":"— সূরা আল-আনআম, ৬:১৪১",
- "scripture.animals":"“যে আল্লাহর সৃষ্টির প্রতি দয়ালু, সে নিজের প্রতিই দয়ালু।”","scripture.animalsSrc":"— আবু দাউদ ২৮৫৮",
- "scripture.phil":"“আল্লাহ প্রতিটি বিষয়ে ইহসান (উৎকর্ষতা) অবলম্বন করা ফরয করেছেন।”","scripture.philSrc":"— সহীহ মুসলিম ১৯৫৫",
- "scripture.store":"“ন্যায্যভাবে মাপ ও ওজন পূর্ণ কর।”","scripture.storeSrc":"— সূরা আল-আনআম, ৬:১৫২",
- "scripture.contact":"“নিশ্চয় আল্লাহ তোমাদের আদেশ দিচ্ছেন যে, আমানত তার হকদারদের কাছে পৌঁছে দাও।”","scripture.contactSrc":"— সূরা আন-নিসা, ৪:৫৮",
  "products.eyebrow":"পণ্য প্রদর্শনী","products.title":"আমাদের উৎপাদনের একটি ঝলক।","products.price":"মূল্য জানতে যোগাযোগ করুন","products.view":"পণ্য দেখুন",
  "products.cat1":"আমাদের জমি থেকে","products.cat2":"আমাদের ঐতিহ্য থেকে",
  "products.p1t":"মৌসুমি সবজি","products.p1d":"মাঠ থেকে সরাসরি সংগ্রহ করা তাজা সবজি।",
@@ -865,6 +861,15 @@ bn:{
  "contact.i3t":"ফোন","contact.i3d":"০১৭১৫-০০৪২৫১",
  "contact.i4t":"ইমেইল","contact.i4d":"qariatulihsan@gmail.com",
  "contact.i5t":"পরিদর্শনের সময়","contact.i5d":"সকাল ৯টা – রাত ১০টা (দোকান)",
+ "contact.mapPlaceholder":"মানচিত্র — অবস্থান শীঘ্রই যোগ করা হবে",
+ "scripture.hero":"“সৎকর্ম ও তাকওয়ার কাজে একে অপরকে সাহায্য কর।”","scripture.heroSrc":"— সূরা আল-মায়িদাহ, ৫:২",
+ "scripture.about":"“তিনিই তোমাদের পৃথিবীতে স্থলাভিষিক্ত করেছেন।”","scripture.aboutSrc":"— সূরা ফাতির, ৩৫:৩৯",
+ "scripture.begin":"“আল্লাহর কাছে সবচেয়ে প্রিয় আমল তা-ই, যা নিয়মিত করা হয়, যদিও তা অল্প হয়।”","scripture.beginSrc":"— বুখারী",
+ "scripture.agri":"“তিনিই বাগান সৃষ্টি করেছেন… তোমরা তার ফল খাও যখন তা পাকে, এবং ফসল তোলার দিনে তার হক আদায় কর।”","scripture.agriSrc":"— সূরা আল-আনআম, ৬:১৪১",
+ "scripture.animals":"“যে আল্লাহর সৃষ্টির প্রতি দয়ালু, সে নিজের প্রতিই দয়ালু।”","scripture.animalsSrc":"— আবু দাউদ ২৮৫৮",
+ "scripture.phil":"“আল্লাহ প্রতিটি বিষয়ে ইহসান (উৎকর্ষতা) অবলম্বন করা ফরয করেছেন।”","scripture.philSrc":"— সহীহ মুসলিম ১৯৫৫",
+ "scripture.store":"“ন্যায্যভাবে মাপ ও ওজন পূর্ণ কর।”","scripture.storeSrc":"— সূরা আল-আনআম, ৬:১৫২",
+ "scripture.contact":"“নিশ্চয় আল্লাহ তোমাদের আদেশ দিচ্ছেন যে, আমানত তার হকদারদের কাছে পৌঁছে দাও।”","scripture.contactSrc":"— সূরা আন-নিসা, ৪:৫৮",
  "footer.tag":"ঈমান। প্রকৃতি। সম্প্রদায়। জীবনযাপনের এক উত্তম পথ।",
  "footer.h1":"ঘুরে দেখুন","footer.h2":"দোকান","footer.h3":"যোগাযোগ",
  "footer.s1":"পণ্যসমূহ","footer.s2":"আমাদের জমি থেকে","footer.s3":"আমাদের ঐতিহ্য থেকে",
@@ -872,6 +877,7 @@ bn:{
  "footer.copy":"© ২০২৬ কারিয়াতুল ইহসান। সর্বস্বত্ব সংরক্ষিত।"
 }
 };
+window.QICMSRuntime?.connect(dict);
 function setLang(lang){document.documentElement.setAttribute('data-lang',lang);document.documentElement.setAttribute('lang', lang==='bn'?'bn':'en');document.querySelectorAll('[data-i18n]').forEach(el=>{const key = el.getAttribute('data-i18n');if(dict[lang] && dict[lang][key]) el.textContent = dict[lang][key];});document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active', b.dataset.setlang===lang));localStorage.setItem('qi-lang', lang);}
 document.querySelectorAll('[data-setlang]').forEach(b=>{b.addEventListener('click', ()=> setLang(b.dataset.setlang));});
 setLang(localStorage.getItem('qi-lang') || 'en');
@@ -901,7 +907,12 @@ galleryGrid.innerHTML = [
   '<div class="gallery-item" data-cat="agri"><img src="gallery-leafy-crop-clean.jpg" alt="Green leafy crop" loading="lazy"></div>',
   '<div class="gallery-item" data-cat="agri"><img src="gallery-red-amaranth-close-clean.jpg" alt="Red amaranth plant" loading="lazy"></div>',
   '<div class="gallery-item" data-cat="agri"><img src="gallery-okra-pod-clean.jpg" alt="Okra pod on a leaf" loading="lazy"></div>',
-  '<div class="gallery-item" data-cat="agri"><img src="gallery-red-amaranth-field-clean.jpg" alt="Red amaranth field" loading="lazy"></div>'
+  '<div class="gallery-item" data-cat="agri"><img src="gallery-red-amaranth-field-clean.jpg" alt="Red amaranth field" loading="lazy"></div>',
+  '<div class="gallery-item" data-cat="animals"><img src="gallery-chickens-coop.jpg" alt="Chickens inside the Qariatul Ihsan poultry shelter" loading="lazy"></div>',
+  '<div class="gallery-item" data-cat="animals"><img src="gallery-ducklings-pen.jpg" alt="Young ducks inside their protected pen" loading="lazy"></div>',
+  '<div class="gallery-item" data-cat="pond"><img src="gallery-ducks-pond-close.jpg" alt="Duck flock swimming together in the pond" loading="lazy"></div>',
+  '<div class="gallery-item" data-cat="pond"><img src="gallery-ducks-pond-goats.jpg" alt="Ducks on the pond with goats beside the field" loading="lazy"></div>',
+  '<div class="gallery-item" data-cat="pond"><img src="gallery-ducks-pond-wide.jpg" alt="Wide view of ducks swimming at Qariatul Ihsan" loading="lazy"></div>'
 ].join('');
 document.querySelectorAll('.gfilter').forEach(btn=>{btn.addEventListener('click', ()=>{document.querySelectorAll('.gfilter').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const f = btn.dataset.filter;document.querySelectorAll('.gallery-item').forEach(item=>{item.style.display = (f==='all' || item.dataset.cat===f) ? 'block' : 'none';});});});
 document.querySelectorAll('.animal-card').forEach(card=>{card.setAttribute('role','img');card.setAttribute('aria-label',card.textContent.trim()+' at Qariatul Ihsan');});
