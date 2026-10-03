@@ -1,14 +1,6 @@
 (function () {
   'use strict';
 
-  const TEXT_KEY = 'qi-cms-text';
-  const DB_NAME = 'qi-cms';
-  const DB_VERSION = 1;
-  const STORE = 'images';
-  const objectUrls = new Map();
-  let defaultTexts = { en: {}, bn: {} };
-  let connectedDict = null;
-
   const imageSlots = [
     { id:'site-logo', section:'Brand', label:'Header and footer logo', selector:'.nav-logo img, .footer-brand img', type:'image' },
     { id:'hero-background', section:'Home', label:'Hero background', selector:'.hero-bg', type:'background', overlay:'radial-gradient(ellipse at 30% 20%,rgba(180,160,90,.18),transparent 55%),linear-gradient(180deg,rgba(20,26,16,.25),rgba(20,26,16,.55) 68%,rgba(20,26,16,.88))' },
@@ -32,54 +24,13 @@
 
   for (let i = 1; i <= 30; i += 1) {
     imageSlots.push({
-      id:`gallery-${i}`,
-      section:'Gallery',
-      label:`Gallery image ${i}`,
-      selector:`#galleryGrid .gallery-item:nth-child(${i}) img, #galleryGrid .gallery-item:nth-child(${i}) .ph`,
-      type:'auto'
+      id: `gallery-${i}`,
+      section: 'Gallery',
+      label: `Gallery image ${i}`,
+      selector: `#galleryGrid .gallery-item:nth-child(${i}) img, #galleryGrid .gallery-item:nth-child(${i}) .ph`,
+      type: 'auto'
     });
   }
-
-  function clone(value) {
-    return JSON.parse(JSON.stringify(value));
-  }
-
-  function readTextOverrides() {
-    try { return JSON.parse(localStorage.getItem(TEXT_KEY) || '{"en":{},"bn":{}}'); }
-    catch (_) { return { en:{}, bn:{} }; }
-  }
-
-  function writeTextOverrides(value) {
-    localStorage.setItem(TEXT_KEY, JSON.stringify(value));
-  }
-
-  function openDb() {
-    return new Promise((resolve, reject) => {
-      const request = indexedDB.open(DB_NAME, DB_VERSION);
-      request.onupgradeneeded = () => {
-        const db = request.result;
-        if (!db.objectStoreNames.contains(STORE)) db.createObjectStore(STORE);
-      };
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error);
-    });
-  }
-
-  async function imageRequest(mode, action) {
-    const db = await openDb();
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE, mode);
-      const store = tx.objectStore(STORE);
-      const request = action(store);
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error);
-      tx.oncomplete = () => db.close();
-    });
-  }
-
-  function getImage(id) { return imageRequest('readonly', store => store.get(id)); }
-  function putImage(id, blob) { return imageRequest('readwrite', store => store.put(blob, id)); }
-  function deleteImage(id) { return imageRequest('readwrite', store => store.delete(id)); }
 
   function slotElements(slot, root) {
     try { return Array.from((root || document).querySelectorAll(slot.selector)); }
@@ -96,25 +47,23 @@
       element.style.backgroundSize = 'cover';
       element.style.backgroundPosition = 'center';
     }
-    element.dataset.cmsApplied = slot.id;
   }
 
-  async function applyImage(slot) {
-    const elements = slotElements(slot);
-    if (!elements.length) return;
-    if (objectUrls.has(slot.id)) {
-      elements.filter(element => element.dataset.cmsApplied !== slot.id).forEach(element => setElementImage(element, slot, objectUrls.get(slot.id)));
-      return;
-    }
-    const blob = await getImage(slot.id).catch(() => null);
-    if (!blob) return;
-    const url = URL.createObjectURL(blob);
-    objectUrls.set(slot.id, url);
-    elements.forEach(element => setElementImage(element, slot, url));
+  function resolveUrl(entry) {
+    if (!entry) return '';
+    if (typeof entry === 'string') return entry;
+    return `${entry.path}${entry.v ? `?v=${entry.v}` : ''}`;
   }
 
-  async function applyAllImages() {
-    await Promise.all(imageSlots.map(applyImage));
+  function applyImages(imagesMap, root) {
+    if (!imagesMap) return;
+    Object.keys(imagesMap).forEach((slotId) => {
+      const slot = imageSlots.find((s) => s.id === slotId);
+      if (!slot) return;
+      const url = resolveUrl(imagesMap[slotId]);
+      if (!url) return;
+      slotElements(slot, root).forEach((el) => setElementImage(el, slot, url));
+    });
   }
 
   function getSlotPreview(slot, root) {
@@ -126,34 +75,5 @@
     return matches.length ? matches[matches.length - 1][1] : '';
   }
 
-  function connect(dict) {
-    connectedDict = dict;
-    defaultTexts = clone(dict);
-    const overrides = readTextOverrides();
-    ['en','bn'].forEach(lang => Object.assign(dict[lang], overrides[lang] || {}));
-    applyAllImages();
-    return dict;
-  }
-
-  const api = {
-    imageSlots,
-    connect,
-    getDefaultTexts:() => clone(defaultTexts),
-    getCurrentTexts:() => connectedDict ? clone(connectedDict) : clone(defaultTexts),
-    readTextOverrides,
-    writeTextOverrides,
-    getImage,
-    putImage,
-    deleteImage,
-    applyAllImages,
-    getSlotPreview
-  };
-
-  window.QICMSRuntime = api;
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', applyAllImages, { once:true });
-  } else {
-    applyAllImages();
-  }
-  new MutationObserver(() => applyAllImages()).observe(document.documentElement, { childList:true, subtree:true });
+  window.QICMSRuntime = { imageSlots, applyImages, getSlotPreview, resolveUrl };
 })();

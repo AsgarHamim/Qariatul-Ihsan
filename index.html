@@ -715,7 +715,7 @@ html[data-lang="bn"] .footer-col h5{text-transform:none;}
 </footer>
 <script src="cms-runtime.js"></script>
 <script>
-const dict = {
+const DEFAULT_DICT = {
 en:{
  "brand.name":"Qariatul Ihsan",
  "nav.home":"Home","nav.about":"About","nav.land":"Our Land","nav.agri":"Agriculture","nav.community":"Community","nav.store":"Store","nav.stories":"Stories","nav.gallery":"Gallery","nav.contact":"Contact",
@@ -877,10 +877,24 @@ bn:{
  "footer.copy":"© ২০২৬ কারিয়াতুল ইহসান। সর্বস্বত্ব সংরক্ষিত।"
 }
 };
-window.QICMSRuntime?.connect(dict);
+let dict = DEFAULT_DICT;
 function setLang(lang){document.documentElement.setAttribute('data-lang',lang);document.documentElement.setAttribute('lang', lang==='bn'?'bn':'en');document.querySelectorAll('[data-i18n]').forEach(el=>{const key = el.getAttribute('data-i18n');if(dict[lang] && dict[lang][key]) el.textContent = dict[lang][key];});document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active', b.dataset.setlang===lang));localStorage.setItem('qi-lang', lang);}
 document.querySelectorAll('[data-setlang]').forEach(b=>{b.addEventListener('click', ()=> setLang(b.dataset.setlang));});
 setLang(localStorage.getItem('qi-lang') || 'en');
+(async function loadLiveContent(){
+  try{
+    const res = await fetch('content.json?v=' + Date.now());
+    if(!res.ok) return;
+    const content = await res.json();
+    if(content && content.text){
+      dict = { en:{...DEFAULT_DICT.en, ...(content.text.en||{})}, bn:{...DEFAULT_DICT.bn, ...(content.text.bn||{})} };
+      setLang(document.documentElement.getAttribute('data-lang') || 'en');
+    }
+    if(content && content.images && window.QICMSRuntime){
+      window.QICMSRuntime.applyImages(content.images);
+    }
+  }catch(_){ /* keep defaults if content.json can't be reached */ }
+})();
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', ()=>{navbar.classList.toggle('scrolled', window.scrollY > 40);});
 const mobileToggle = document.getElementById('mobileToggle');
