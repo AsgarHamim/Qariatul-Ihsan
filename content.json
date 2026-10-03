@@ -2,7 +2,7 @@
   "text": {
     "en": {
       "brand.name": "Qariatul Ihsan",
-      "nav.home": "Hom",
+      "nav.home": "Home",
       "nav.about": "About",
       "nav.land": "Our Land",
       "nav.agri": "Agriculture",
@@ -444,5 +444,5 @@
     }
   },
   "images": {},
-  "updatedAt": "2026-10-03T06:02:59.289Z"
+  "updatedAt": "2026-10-03T06:03:23.797Z"
 }
