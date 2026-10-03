@@ -103,10 +103,30 @@
   </div>
 </div>
 <div class="toast" id="toast" role="status"></div>
+<iframe id="previewFrame" src="../index.html" style="position:fixed;width:1280px;height:4000px;left:-9999px;top:0;border:0;" aria-hidden="true"></iframe>
 
+<script src="../cms-runtime.js"></script>
 <script>
 const sectionNames={brand:'Brand',nav:'Navigation',hero:'Home',about:'About',begin:'Beginning',land:'Our Land',agri:'Agriculture',river:'Pond & Nature',animals:'Animals',future:'Future Community',phil:'Meaning of Ihsan',store:'Store',products:'Products',journal:'Journal',gallery:'Gallery',tl:'Journey',contact:'Contact',scripture:'Quran & Hadith',footer:'Footer'};
-const state={mode:'text',section:'hero',lang:'en',query:'',server:{text:{en:{},bn:{}},images:{}},draft:{en:{},bn:{}},imageSection:'Home'};
+const state={mode:'text',section:'hero',lang:'en',query:'',server:{text:{en:{},bn:{}},images:{}},draft:{en:{},bn:{}},imageSection:'Home',defaults:{},defaultsReady:false};
+const previewFrame=document.getElementById('previewFrame');
+let defaultsPromise=new Promise(resolve=>{
+  previewFrame.addEventListener('load',()=>{
+    setTimeout(()=>{
+      try{
+        const doc=previewFrame.contentDocument;
+        const api=previewFrame.contentWindow.QICMSRuntime;
+        if(api && doc){
+          api.imageSlots.forEach(slot=>{
+            state.defaults[slot.id]=api.getSlotPreview(slot,doc);
+          });
+        }
+      }catch(_){}
+      state.defaultsReady=true;
+      resolve();
+    },900);
+  });
+});
 const area=document.getElementById('contentArea');
 const nav=document.getElementById('sectionNav');
 const search=document.getElementById('searchInput');
@@ -160,7 +180,7 @@ async function loadContent(){
 }
 
 function sections(){return [...new Set(Object.keys(state.server.text.en||{}).map(prefix))]}
-function imageSlots(){return (window.QI_IMAGE_SLOTS||[])}
+function imageSlots(){return (window.QICMSRuntime&&window.QICMSRuntime.imageSlots)||[]}
 function renderNav(){
   const items=state.mode==='text'?sections():[...new Set(imageSlots().map(x=>x.section))];
   if(state.mode==='text'&&!items.includes(state.section))state.section=items[0]||'';
@@ -188,7 +208,8 @@ function renderImages(){
   let slots=imageSlots().filter(x=>x.section===state.imageSection);
   if(state.query)slots=slots.filter(x=>(x.label+' '+x.section).toLowerCase().includes(state.query));
   if(!slots.length){area.innerHTML='<div class="panel"><div class="empty">No matching pictures in this section.</div></div>';return}
-  area.innerHTML=`<div class="image-grid">${slots.map(slot=>{const override=state.server.images[slot.id];const previewUrl=override?(typeof override==='string'?override:`${override.path}?v=${override.v||''}`):'';return `<article class="image-card"><div class="image-preview" data-preview="${slot.id}" style="${previewUrl?`background-image:url('${previewUrl}')`:''}">${previewUrl?`<span class="changed-badge">Changed</span>`:'Using default image'}</div><div class="image-body"><h3>${slot.label}</h3><p>${slot.section}</p><div class="image-actions"><label class="upload-label">Choose replacement<input type="file" accept="image/*" data-upload="${slot.id}"></label>${previewUrl?`<button class="restore-image" data-restore="${slot.id}" title="Restore original">↺</button>`:''}</div></div></article>`}).join('')}</div>`;
+  if(!state.defaultsReady){area.innerHTML='<div class="panel"><div class="empty">Loading current pictures…</div></div>';defaultsPromise.then(()=>{if(state.mode==='images')renderImages()});return}
+  area.innerHTML=`<div class="image-grid">${slots.map(slot=>{const override=state.server.images[slot.id];const overridden=!!override;const previewUrl=overridden?(typeof override==='string'?override:`${override.path}?v=${override.v||''}`):(state.defaults[slot.id]||'');return `<article class="image-card"><div class="image-preview" data-preview="${slot.id}" style="${previewUrl?`background-image:url('${previewUrl}')`:''}">${previewUrl?(overridden?`<span class="changed-badge">Changed</span>`:''):'No preview available'}</div><div class="image-body"><h3>${slot.label}</h3><p>${slot.section}</p><div class="image-actions"><label class="upload-label">Choose replacement<input type="file" accept="image/*" data-upload="${slot.id}"></label>${overridden?`<button class="restore-image" data-restore="${slot.id}" title="Restore original">↺</button>`:''}</div></div></article>`}).join('')}</div>`;
 }
 function render(){state.mode==='text'?renderText():renderImages()}
 
@@ -254,32 +275,6 @@ document.getElementById('saveText').addEventListener('click', async ()=>{
 });
 
 checkSession();
-</script>
-<script>
-window.QI_IMAGE_SLOTS = (function(){
-  const slots = [
-    { id:'site-logo', section:'Brand', label:'Header and footer logo' },
-    { id:'hero-background', section:'Home', label:'Hero background' },
-    { id:'land-map', section:'Our Land', label:'Interactive land image' },
-    { id:'agriculture-vegetables', section:'Agriculture', label:'Vegetables image' },
-    { id:'agriculture-fruits', section:'Agriculture', label:'Fruits image' },
-    { id:'agriculture-crops', section:'Agriculture', label:'Crops image' },
-    { id:'agriculture-fish', section:'Agriculture', label:'Fish image' },
-    { id:'pond-feature', section:'Pond', label:'Pond feature image' },
-    { id:'livestock-showcase', section:'Animals', label:'Livestock showcase image' },
-    { id:'store-land', section:'Store', label:'From Our Land image' },
-    { id:'store-heritage', section:'Store', label:'From Our Heritage image' },
-    { id:'product-1', section:'Products', label:'Seasonal Vegetables' },
-    { id:'product-2', section:'Products', label:'Orchard Fruits' },
-    { id:'product-3', section:'Products', label:'Rice Atta' },
-    { id:'product-4', section:'Products', label:'Mustard Oil' },
-    { id:'journal-1', section:'Journal', label:'A Day at Qariatul Ihsan' },
-    { id:'journal-2', section:'Journal', label:'Our First Harvest' },
-    { id:'journal-3', section:'Journal', label:'Life Beside the Pond' }
-  ];
-  for (let i=1;i<=30;i+=1) slots.push({ id:`gallery-${i}`, section:'Gallery', label:`Gallery image ${i}` });
-  return slots;
-})();
 </script>
 </body>
 </html>
