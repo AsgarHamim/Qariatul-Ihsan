@@ -455,8 +455,12 @@
     "store-product-3": {
       "path": "/cms-images/store-product-3.png",
       "v": 1791166331752
+    },
+    "store-product-4": {
+      "path": "/cms-images/store-product-4.png",
+      "v": 1791171364110
     }
   },
   "products": [],
-  "updatedAt": "2026-10-05T02:12:11.752Z"
+  "updatedAt": "2026-10-05T03:36:04.110Z"
 }
