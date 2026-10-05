@@ -540,7 +540,14 @@ let state = { filter:"all", sort:"featured", perPage:6, page:1, qty:{}, cart:{} 
 products.forEach(p => state.qty[p.id] = 1);
 
 let storeImageOverrides = {};
-(async function loadStoreImages(){
+const catTagMap = {
+  vegetables:{en:'Vegetables & Fruits',bn:'শাকসবজি ও ফল'},
+  meat:{en:'Meat & Eggs',bn:'মাংস ও ডিম'},
+  fish:{en:'Fish',bn:'মাছ'},
+  groceries:{en:'Groceries',bn:'মুদিপণ্য'},
+  clothing:{en:'Clothing',bn:'পোশাক'}
+};
+(async function loadStoreContent(){
   try{
     const res = await fetch('../content.json?v=' + Date.now());
     if(!res.ok) return;
@@ -554,8 +561,26 @@ let storeImageOverrides = {};
       }
     });
     storeImageOverrides = next;
+
+    const customProducts = (content && content.products) || [];
+    customProducts.forEach(p=>{
+      const tag = catTagMap[p.cat] || catTagMap.groceries;
+      products.push({
+        id: p.id,
+        name: p.name,
+        unit: p.unit,
+        price: p.price,
+        icon: '🛒',
+        cat: p.cat,
+        tag,
+        desc: p.desc,
+        image: p.image ? `${p.image.path}${p.image.v ? '?v='+p.image.v : ''}` : null
+      });
+      state.qty[p.id] = 1;
+    });
+
     render();
-  }catch(_){ /* keep default icon/gradient cards if content.json is unreachable */ }
+  }catch(_){ /* keep base cards if content.json is unreachable */ }
 })();
 
 const grid = document.getElementById('productGrid');
@@ -595,10 +620,11 @@ function render(){
     const card = document.createElement('div');
     card.className = 'card';
     card.dataset.productId = p.id;
-    const photoUrl = storeImageOverrides['store-product-' + p.id];
+    const photoUrl = p.image || storeImageOverrides['store-product-' + p.id];
     const mediaStyle = photoUrl
       ? `background-image:url('${photoUrl}');background-size:cover;background-position:center`
-      : `background:${mediaBg[p.cat]}`;
+      : `background:${mediaBg[p.cat] || mediaBg.groceries}`;
+    const descText = p.desc ? (productText(p,'desc') || '') : '';
     card.innerHTML = `
       <div class="card-media" style="${mediaStyle}">
         <span class="card-tag">${productText(p,'tag')}</span>
@@ -606,7 +632,7 @@ function render(){
       </div>
       <div class="card-body">
         <div>
-          <p class="card-name">${productText(p,'name')}</p>
+          <p class="card-name" ${descText ? `title="${descText.replace(/"/g,'&quot;')}"` : ''}>${productText(p,'name')}</p>
           <p class="card-unit">${productText(p,'unit')}</p>
         </div>
         <div class="price-row">

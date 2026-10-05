@@ -61,6 +61,20 @@
 .login-card .btn{width:100%;padding:12px;font-size:.92rem}
 .login-error{color:var(--danger);font-size:.82rem;min-height:18px;margin-bottom:8px}
 .hidden{display:none !important}
+.product-form{background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:19px;margin-bottom:20px}
+.product-form h2{font-size:1rem;margin:0 0 14px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-grid .full{grid-column:1 / -1}
+.form-grid label{display:block;font-size:.78rem;font-weight:700;color:#35483e;margin-bottom:5px}
+.form-grid input,.form-grid select,.form-grid textarea{width:100%;border:1px solid #d9e1dc;border-radius:8px;background:#fff;padding:10px 11px;font:inherit}
+.form-grid textarea{min-height:64px;resize:vertical}
+.form-actions{margin-top:14px;display:flex;justify-content:flex-end}
+.product-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.product-card-admin{background:#fff;border:1px solid var(--line);border-radius:13px;overflow:hidden;box-shadow:0 5px 18px rgba(25,56,41,.06)}
+.product-card-admin .pv{aspect-ratio:16/10;background:#e9efea center/cover no-repeat;display:flex;align-items:center;justify-content:center;font-size:1.6rem}
+.product-card-admin .pb{padding:12px}.product-card-admin .pb h3{font-size:.9rem;margin:0 0 3px}.product-card-admin .pb p{margin:0 0 8px;color:var(--muted);font-size:.78rem}
+.product-card-admin .pb .price{font-weight:700;color:var(--forest);margin-bottom:9px}
+.delete-product{width:100%;border:1px solid #f0cbc6;background:#fff0ee;color:var(--danger);border-radius:8px;padding:8px;font-weight:700;cursor:pointer}
 .banner{background:#eef6f0;border:1px solid #cfe6d6;color:#1e4a2c;border-radius:10px;padding:11px 14px;font-size:.82rem;margin-bottom:16px}
 @media(max-width:1180px){.workspace{grid-template-columns:220px 1fr}}
 @media(max-width:760px){.topbar{padding:11px 14px}.brand span{display:none}.top-actions .btn-outline{display:none}.workspace{display:block}.sidebar{position:sticky;top:68px;z-index:10;padding:10px 12px;border-right:0;border-bottom:1px solid var(--line)}.section-nav{flex-direction:row;overflow:auto;padding-bottom:3px}.section-btn{white-space:nowrap}.sidebar-label{display:none}.mode-switch{margin-bottom:10px}.editor{padding:18px 12px}.editor-head{display:block}.save-state{margin-top:8px}.image-grid{grid-template-columns:1fr}}
@@ -86,7 +100,7 @@
   </header>
   <div class="workspace">
     <aside class="sidebar">
-      <div class="mode-switch"><button class="mode-btn active" data-mode="text">Text</button><button class="mode-btn" data-mode="images">Pictures</button></div>
+      <div class="mode-switch" style="grid-template-columns:1fr 1fr 1fr"><button class="mode-btn active" data-mode="text">Text</button><button class="mode-btn" data-mode="images">Pictures</button><button class="mode-btn" data-mode="products">Store</button></div>
       <div class="sidebar-label">Sections</div>
       <nav class="section-nav" id="sectionNav"></nav>
     </aside>
@@ -108,7 +122,8 @@
 <script src="../cms-runtime.js"></script>
 <script>
 const sectionNames={brand:'Brand',nav:'Navigation',hero:'Home',about:'About',begin:'Beginning',land:'Our Land',agri:'Agriculture',river:'Pond & Nature',animals:'Animals',future:'Future Community',phil:'Meaning of Ihsan',store:'Store',products:'Products',journal:'Journal',gallery:'Gallery',tl:'Journey',contact:'Contact',scripture:'Quran & Hadith',footer:'Footer'};
-const state={mode:'text',section:'hero',lang:'en',query:'',server:{text:{en:{},bn:{}},images:{}},draft:{en:{},bn:{}},imageSection:'Home',defaults:{},defaultsReady:false};
+const state={mode:'text',section:'hero',lang:'en',query:'',server:{text:{en:{},bn:{}},images:{},products:[]},draft:{en:{},bn:{}},imageSection:'Home',defaults:{},defaultsReady:false};
+const productCats=[{v:'vegetables',l:'Vegetables & Fruits'},{v:'meat',l:'Meat & Eggs'},{v:'fish',l:'Fish'},{v:'groceries',l:'Groceries'},{v:'clothing',l:'Clothing'}];
 const previewFrame=document.getElementById('previewFrame');
 let defaultsPromise=new Promise(resolve=>{
   previewFrame.addEventListener('load',()=>{
@@ -174,6 +189,7 @@ async function loadContent(){
     if(res.status===401){ showLogin(); return; }
     const data=await res.json();
     state.server=data;
+    state.server.products=state.server.products||[];
     state.draft={en:{...data.text.en},bn:{...data.text.bn}};
     renderNav();render();
   }catch(_){ area.innerHTML='<div class="panel"><div class="empty">Could not load content. Refresh and try again.</div></div>'; }
@@ -182,6 +198,7 @@ async function loadContent(){
 function sections(){return [...new Set(Object.keys(state.server.text.en||{}).map(prefix))]}
 function imageSlots(){return (window.QICMSRuntime&&window.QICMSRuntime.imageSlots)||[]}
 function renderNav(){
+  if(state.mode==='products'){nav.innerHTML='';return}
   const items=state.mode==='text'?sections():[...new Set(imageSlots().map(x=>x.section))];
   if(state.mode==='text'&&!items.includes(state.section))state.section=items[0]||'';
   if(state.mode==='images'&&!items.includes(state.imageSection))state.imageSection=items[0]||'';
@@ -211,9 +228,29 @@ function renderImages(){
   if(!state.defaultsReady){area.innerHTML='<div class="panel"><div class="empty">Loading current pictures…</div></div>';defaultsPromise.then(()=>{if(state.mode==='images')renderImages()});return}
   area.innerHTML=`<div class="image-grid">${slots.map(slot=>{const override=state.server.images[slot.id];const overridden=!!override;const previewUrl=overridden?(typeof override==='string'?override:`${override.path}?v=${override.v||''}`):(state.defaults[slot.id]||'');return `<article class="image-card"><div class="image-preview" data-preview="${slot.id}" style="${previewUrl?`background-image:url('${previewUrl}')`:''}">${previewUrl?(overridden?`<span class="changed-badge">Changed</span>`:''):'No preview available'}</div><div class="image-body"><h3>${slot.label}</h3><p>${slot.section}</p><div class="image-actions"><label class="upload-label">Choose replacement<input type="file" accept="image/*" data-upload="${slot.id}"></label>${overridden?`<button class="restore-image" data-restore="${slot.id}" title="Restore original">↺</button>`:''}</div></div></article>`}).join('')}</div>`;
 }
-function render(){state.mode==='text'?renderText():renderImages()}
+function renderProducts(){
+  document.getElementById('pageTitle').textContent='Store products';
+  document.getElementById('pageSub').textContent='Add new products to the store page, or remove ones you added.';
+  document.getElementById('langTabs').style.display='none';document.getElementById('saveText').style.display='none';document.querySelector('.search').style.display='none';
+  const list=state.server.products||[];
+  const catOptions=productCats.map(c=>`<option value="${c.v}">${c.l}</option>`).join('');
+  const formHtml=`<div class="product-form"><h2>Add a new product</h2><div class="form-grid">
+    <div><label>Title (English)</label><input id="pf-nameEn" placeholder="e.g. Fresh Guava"></div>
+    <div><label>Title (বাংলা)</label><input id="pf-nameBn" placeholder="যেমন: তাজা পেয়ারা"></div>
+    <div class="full"><label>Description (English)</label><textarea id="pf-descEn" placeholder="Short description"></textarea></div>
+    <div class="full"><label>Description (বাংলা)</label><textarea id="pf-descBn" placeholder="সংক্ষিপ্ত বিবরণ"></textarea></div>
+    <div><label>Price (৳)</label><input id="pf-price" type="number" min="1" step="1" placeholder="e.g. 250"></div>
+    <div><label>Category</label><select id="pf-cat">${catOptions}</select></div>
+    <div><label>Unit (English)</label><input id="pf-unitEn" placeholder="per kg / each"></div>
+    <div><label>Unit (বাংলা)</label><input id="pf-unitBn" placeholder="প্রতি কেজি / প্রতিটি"></div>
+    <div class="full"><label>Picture</label><input id="pf-image" type="file" accept="image/*"></div>
+  </div><div class="form-actions"><button class="btn" id="addProductBtn">Add product</button></div></div>`;
+  const listHtml=list.length?`<div class="product-list">${list.map(p=>{const img=p.image?`${p.image.path}${p.image.v?'?v='+p.image.v:''}`:'';return `<article class="product-card-admin"><div class="pv" style="${img?`background-image:url('${img}')`:''}">${img?'':'🛒'}</div><div class="pb"><h3>${p.name.en}</h3><p>${p.desc&&p.desc.en?p.desc.en:''}</p><div class="price">৳${p.price}</div><button class="delete-product" data-delete-product="${p.id}">Remove product</button></div></article>`}).join('')}</div>`:'<div class="panel"><div class="empty">No products added yet.</div></div>';
+  area.innerHTML=formHtml+listHtml;
+}
+function render(){if(state.mode==='text')renderText();else if(state.mode==='images')renderImages();else renderProducts()}
 
-document.querySelectorAll('.mode-btn').forEach(btn=>btn.addEventListener('click',()=>{state.mode=btn.dataset.mode;document.querySelectorAll('.mode-btn').forEach(x=>x.classList.toggle('active',x===btn));state.query='';search.value='';renderNav();render()}));
+document.querySelectorAll('.mode-btn').forEach(btn=>btn.addEventListener('click',()=>{state.mode=btn.dataset.mode;document.querySelectorAll('.mode-btn').forEach(x=>x.classList.toggle('active',x===btn));state.query='';search.value='';document.querySelector('.search').style.display='';renderNav();render()}));
 nav.addEventListener('click',e=>{const btn=e.target.closest('[data-section]');if(!btn)return;if(state.mode==='text')state.section=btn.dataset.section;else state.imageSection=btn.dataset.section;renderNav();render()});
 document.getElementById('langTabs').addEventListener('click',e=>{const btn=e.target.closest('[data-lang]');if(!btn)return;state.lang=btn.dataset.lang;document.querySelectorAll('.lang-tab').forEach(x=>x.classList.toggle('active',x===btn));renderText()});
 search.addEventListener('input',()=>{state.query=search.value.trim().toLowerCase();render()});
@@ -242,6 +279,51 @@ area.addEventListener('change', async e=>{
 });
 
 area.addEventListener('click', async e=>{
+  const addBtn=e.target.closest('#addProductBtn');
+  if(addBtn){
+    const nameEn=document.getElementById('pf-nameEn').value.trim();
+    const price=document.getElementById('pf-price').value;
+    const cat=document.getElementById('pf-cat').value;
+    if(!nameEn||!price){toast('Title and price are required.',true);return}
+    addBtn.disabled=true;addBtn.textContent='Adding…';
+    try{
+      const fileInput=document.getElementById('pf-image');
+      let dataUrl=null;
+      if(fileInput.files[0]){
+        if(fileInput.files[0].size>4.5*1024*1024){toast('Please choose an image under 4MB.',true);addBtn.disabled=false;addBtn.textContent='Add product';return}
+        dataUrl=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(fileInput.files[0])});
+      }
+      const payload={
+        nameEn, nameBn:document.getElementById('pf-nameBn').value.trim(),
+        descEn:document.getElementById('pf-descEn').value.trim(), descBn:document.getElementById('pf-descBn').value.trim(),
+        unitEn:document.getElementById('pf-unitEn').value.trim(), unitBn:document.getElementById('pf-unitBn').value.trim(),
+        price, cat, dataUrl
+      };
+      const res=await fetch('/api/products',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      const data=await res.json();
+      if(!res.ok) throw new Error(data.error||'Could not add product');
+      state.server.products=[...(state.server.products||[]),data.product];
+      toast('Product added — live in about 15–20 seconds.');
+      renderProducts();
+    }catch(err){
+      toast('Could not add product: '+err.message, true);
+      addBtn.disabled=false;addBtn.textContent='Add product';
+    }
+    return;
+  }
+  const delProduct=e.target.closest('[data-delete-product]');
+  if(delProduct){
+    if(!confirm('Remove this product from the store page?'))return;
+    try{
+      const res=await fetch('/api/products',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:delProduct.dataset.deleteProduct})});
+      const data=await res.json();
+      if(!res.ok) throw new Error(data.error||'Could not remove product');
+      state.server.products=(state.server.products||[]).filter(p=>p.id!==delProduct.dataset.deleteProduct);
+      toast('Product removed — live in about 15–20 seconds.');
+      renderProducts();
+    }catch(err){ toast('Could not remove product: '+err.message, true); }
+    return;
+  }
   const restore=e.target.closest('[data-restore]');
   if(!restore)return;
   setSaveState('working','Restoring…');
