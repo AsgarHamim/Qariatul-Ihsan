@@ -13,10 +13,6 @@
     { id:'livestock-showcase', section:'Animals', label:'Livestock showcase image', selector:'.animal-showcase img', type:'image' },
     { id:'store-land', section:'Store', label:'From Our Land image', selector:'.store-split .store-card:nth-child(1)', type:'background', overlay:'linear-gradient(160deg,rgba(28,45,25,.08),rgba(20,28,18,.7))' },
     { id:'store-heritage', section:'Store', label:'From Our Heritage image', selector:'.store-split .store-card:nth-child(2)', type:'background', overlay:'linear-gradient(160deg,rgba(28,45,25,.08),rgba(20,28,18,.7))' },
-    { id:'product-1', section:'Products', label:'Seasonal Vegetables', selector:'#products .product-card:nth-child(1) .product-img', type:'background' },
-    { id:'product-2', section:'Products', label:'Orchard Fruits', selector:'#products .product-card:nth-child(2) .product-img', type:'background' },
-    { id:'product-3', section:'Products', label:'Rice Atta', selector:'#products .product-card:nth-child(3) .product-img', type:'background' },
-    { id:'product-4', section:'Products', label:'Mustard Oil', selector:'#products .product-card:nth-child(4) .product-img', type:'background' },
     { id:'journal-1', section:'Journal', label:'A Day at Qariatul Ihsan', selector:'.journal-card:nth-child(1) .journal-img', type:'background' },
     { id:'journal-2', section:'Journal', label:'Our First Harvest', selector:'.journal-card:nth-child(2) .journal-img', type:'background' },
     { id:'journal-3', section:'Journal', label:'Life Beside the Pond', selector:'.journal-card:nth-child(3) .journal-img', type:'background' }
@@ -37,12 +33,20 @@
     5:'Farm Fresh Eggs',6:'Raw Honey',7:'Duck Eggs',8:'Pond Fish (Rui)',
     9:'Nakshi Kantha Shawl',10:'Handloom Cotton Saree',11:'Jamdani Scarf',12:'Khadi Panjabi'
   };
+  const homepageSelectorById = {
+    1:'#products .product-card:nth-child(1) .product-img',
+    2:'#products .product-card:nth-child(2) .product-img',
+    3:'#products .product-card:nth-child(3) .product-img',
+    4:'#products .product-card:nth-child(4) .product-img'
+  };
   Object.keys(storeProductNames).forEach((id) => {
+    const storeSelector = `#productGrid [data-product-id="${id}"] .card-media`;
+    const homeSelector = homepageSelectorById[id];
     imageSlots.push({
       id: `store-product-${id}`,
       section: 'Store Products',
       label: storeProductNames[id],
-      selector: `#productGrid [data-product-id="${id}"] .card-media`,
+      selector: homeSelector ? `${homeSelector}, ${storeSelector}` : storeSelector,
       type: 'background'
     });
   });
