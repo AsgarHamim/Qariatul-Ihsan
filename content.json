@@ -447,7 +447,11 @@
     "product-1": {
       "path": "/cms-images/product-1.png",
       "v": 1791008132064
+    },
+    "product-2": {
+      "path": "/cms-images/product-2.png",
+      "v": 1791164736422
     }
   },
-  "updatedAt": "2026-10-03T06:15:32.065Z"
+  "updatedAt": "2026-10-05T01:45:36.422Z"
 }
