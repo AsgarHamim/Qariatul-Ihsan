@@ -32,6 +32,21 @@
     });
   }
 
+  const storeProductNames = {
+    1:'Seasonal Vegetables',2:'Orchard Fruits',3:'Rice Atta',4:'Mustard Oil',
+    5:'Farm Fresh Eggs',6:'Raw Honey',7:'Duck Eggs',8:'Pond Fish (Rui)',
+    9:'Nakshi Kantha Shawl',10:'Handloom Cotton Saree',11:'Jamdani Scarf',12:'Khadi Panjabi'
+  };
+  Object.keys(storeProductNames).forEach((id) => {
+    imageSlots.push({
+      id: `store-product-${id}`,
+      section: 'Store Products',
+      label: storeProductNames[id],
+      selector: `#productGrid [data-product-id="${id}"] .card-media`,
+      type: 'background'
+    });
+  });
+
   function slotElements(slot, root) {
     try { return Array.from((root || document).querySelectorAll(slot.selector)); }
     catch (_) { return []; }

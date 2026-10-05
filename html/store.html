@@ -539,6 +539,25 @@ const mediaBg = {
 let state = { filter:"all", sort:"featured", perPage:6, page:1, qty:{}, cart:{} };
 products.forEach(p => state.qty[p.id] = 1);
 
+let storeImageOverrides = {};
+(async function loadStoreImages(){
+  try{
+    const res = await fetch('../content.json?v=' + Date.now());
+    if(!res.ok) return;
+    const content = await res.json();
+    const images = (content && content.images) || {};
+    const next = {};
+    Object.keys(images).forEach(key=>{
+      if(key.indexOf('store-product-') === 0){
+        const entry = images[key];
+        next[key] = typeof entry === 'string' ? entry : `${entry.path}${entry.v ? '?v='+entry.v : ''}`;
+      }
+    });
+    storeImageOverrides = next;
+    render();
+  }catch(_){ /* keep default icon/gradient cards if content.json is unreachable */ }
+})();
+
 const grid = document.getElementById('productGrid');
 const pagination = document.getElementById('pagination');
 const resultCount = document.getElementById('resultCount');
@@ -575,10 +594,15 @@ function render(){
     const qty = state.qty[p.id];
     const card = document.createElement('div');
     card.className = 'card';
+    card.dataset.productId = p.id;
+    const photoUrl = storeImageOverrides['store-product-' + p.id];
+    const mediaStyle = photoUrl
+      ? `background-image:url('${photoUrl}');background-size:cover;background-position:center`
+      : `background:${mediaBg[p.cat]}`;
     card.innerHTML = `
-      <div class="card-media" style="background:${mediaBg[p.cat]}">
+      <div class="card-media" style="${mediaStyle}">
         <span class="card-tag">${productText(p,'tag')}</span>
-        <span aria-hidden="true">${p.icon}</span>
+        <span aria-hidden="true" ${photoUrl ? 'style="display:none"' : ''}>${p.icon}</span>
       </div>
       <div class="card-body">
         <div>
