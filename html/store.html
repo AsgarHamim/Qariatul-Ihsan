@@ -199,11 +199,18 @@
   }
   .filter-inner{
     max-width:1200px; margin:0 auto;
-    padding:16px 28px;
+    padding:16px 0 16px 28px;
     display:flex; align-items:center; justify-content:space-between;
     gap:20px; flex-wrap:wrap;
   }
-  .filter-tabs{display:flex; gap:6px; flex-wrap:wrap;}
+  .filter-tabs{
+    display:flex; gap:6px; flex-wrap:nowrap;
+    flex:1 1 auto; min-width:0;
+    overflow-x:auto; overscroll-behavior-x:contain;
+    -webkit-overflow-scrolling:touch; scrollbar-width:none;
+    padding-right:28px;
+  }
+  .filter-tabs::-webkit-scrollbar{display:none;}
   .filter-tab{
     border:1px solid var(--line);
     background:var(--card);
@@ -214,6 +221,8 @@
     font-weight:500;
     cursor:pointer;
     transition:all .15s ease;
+    white-space:nowrap;
+    flex-shrink:0;
   }
   .filter-tab:hover{border-color:var(--forest-light); color:var(--forest);}
   .filter-tab.active{
@@ -221,7 +230,7 @@
     border-color:var(--forest);
     color:#FBF7EC;
   }
-  .filter-controls{display:flex; align-items:center; gap:14px; flex-wrap:wrap;}
+  .filter-controls{display:flex; align-items:center; gap:14px; flex-wrap:wrap; flex-shrink:0; padding-right:28px;}
   .control{display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink-soft);}
   .control select{
     appearance:none;
@@ -398,7 +407,9 @@
     .header-inner{padding:14px 18px;}
     .logo{font-size:16px;gap:8px;}
     .logo img{width:42px;height:42px;}
-    .filter-inner{padding:14px 18px;}
+    .filter-inner{padding:14px 0 14px 18px;}
+    .filter-tabs{flex-basis:100%; padding-right:18px;}
+    .filter-controls{padding-right:18px;}
     .catalog{padding:18px 18px 8px;}
     .hero-inner{padding:0 18px 22px;}
     .filter-bar{top:65px;}
