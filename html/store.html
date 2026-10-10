@@ -27,6 +27,7 @@
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
+  html,body{overflow-x:hidden; max-width:100%;}
   body{
     margin:0;
     background:var(--linen);
@@ -148,6 +149,12 @@
   }
   .mobile-menu a.active{color:var(--gold);}
   .mobile-menu-close{position:absolute; top:18px; right:18px; background:none; border:none; font-size:28px; color:var(--forest); cursor:pointer; line-height:1;}
+  .mobile-menu-langs{display:none; gap:8px; margin-top:14px;}
+  .mobile-menu-langs button{
+    border:1px solid var(--line); background:var(--card); color:var(--ink-soft);
+    padding:8px 16px; border-radius:999px; font-size:13px; cursor:pointer;
+  }
+  .mobile-menu-langs button.active{background:var(--forest); border-color:var(--forest); color:#FBF7EC;}
 
   /* ---------- Hero ---------- */
   .store-hero{
@@ -401,6 +408,11 @@
     .product-grid{grid-template-columns:repeat(2, 1fr);}
     nav.main-nav{display:none;}
     .mobile-toggle{display:flex;}
+    .header-right{gap:8px;}
+  }
+  @media (max-width:640px){
+    .header-right .lang-switch{display:none;}
+    .mobile-menu-langs{display:flex;}
   }
   @media (max-width:560px){
     .product-grid{grid-template-columns:1fr;}
@@ -462,6 +474,10 @@
   <a href="/journal" data-i18n="nav.stories">Stories</a>
   <a href="/gallery" data-i18n="nav.gallery">Gallery</a>
   <a href="/contact" data-i18n="nav.contact">Contact</a>
+  <div class="mobile-menu-langs">
+    <button class="active" type="button" data-setlang="en">English</button>
+    <button type="button" data-setlang="bn">বাংলা</button>
+  </div>
 </div>
 
 <section class="store-hero">
