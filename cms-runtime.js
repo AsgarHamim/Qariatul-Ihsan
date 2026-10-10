@@ -33,6 +33,35 @@
     5:'Farm Fresh Eggs',6:'Raw Honey',7:'Duck Eggs',8:'Pond Fish (Rui)',
     9:'Nakshi Kantha Shawl',10:'Handloom Cotton Saree',11:'Jamdani Scarf',12:'Khadi Panjabi'
   };
+
+  const catTagMap = {
+    vegetables:{en:'Vegetables & Fruits',bn:'শাকসবজি ও ফল'},
+    meat:{en:'Meat & Eggs',bn:'মাংস ও ডিম'},
+    fish:{en:'Fish',bn:'মাছ'},
+    groceries:{en:'Groceries',bn:'মুদিপণ্য'},
+    clothing:{en:'Clothing',bn:'পোশাক'}
+  };
+  const productCats = [
+    {v:'vegetables',l:'Vegetables & Fruits'},
+    {v:'meat',l:'Meat & Eggs'},
+    {v:'fish',l:'Fish'},
+    {v:'groceries',l:'Groceries'},
+    {v:'clothing',l:'Clothing'}
+  ];
+  const baseProducts = [
+    { id:1, name:{en:"Seasonal Vegetables",bn:"মৌসুমি সবজি"}, unit:{en:"per kg",bn:"প্রতি কেজি"}, price:180, icon:"🥬", cat:"vegetables" },
+    { id:2, name:{en:"Orchard Fruits",bn:"বাগানের ফল"}, unit:{en:"per kg",bn:"প্রতি কেজি"}, price:320, icon:"🍊", cat:"vegetables" },
+    { id:3, name:{en:"Rice Atta",bn:"চালের আটা"}, unit:{en:"per kg",bn:"প্রতি কেজি"}, price:90, icon:"🌾", cat:"groceries" },
+    { id:4, name:{en:"Mustard Oil",bn:"সরিষার তেল"}, unit:{en:"per litre",bn:"প্রতি লিটার"}, price:450, icon:"🫙", cat:"groceries" },
+    { id:5, name:{en:"Farm Fresh Eggs",bn:"খামারের তাজা ডিম"}, unit:{en:"per dozen",bn:"প্রতি ডজন"}, price:140, icon:"🥚", cat:"meat" },
+    { id:6, name:{en:"Raw Honey",bn:"খাঁটি মধু"}, unit:{en:"per jar",bn:"প্রতি বয়াম"}, price:650, icon:"🍯", cat:"groceries" },
+    { id:7, name:{en:"Duck Eggs",bn:"হাঁসের ডিম"}, unit:{en:"per dozen",bn:"প্রতি ডজন"}, price:160, icon:"🦆", cat:"meat" },
+    { id:8, name:{en:"Pond Fish (Rui)",bn:"পুকুরের মাছ (রুই)"}, unit:{en:"per kg",bn:"প্রতি কেজি"}, price:380, icon:"🐟", cat:"fish" },
+    { id:9, name:{en:"Nakshi Kantha Shawl",bn:"নকশিকাঁথার শাল"}, unit:{en:"each",bn:"প্রতিটি"}, price:1850, icon:"🧵", cat:"clothing" },
+    { id:10, name:{en:"Handloom Cotton Saree",bn:"হস্তচালিত তাঁতের সুতি শাড়ি"}, unit:{en:"each",bn:"প্রতিটি"}, price:2400, icon:"🥻", cat:"clothing" },
+    { id:11, name:{en:"Jamdani Scarf",bn:"জামদানি স্কার্ফ"}, unit:{en:"each",bn:"প্রতিটি"}, price:1200, icon:"🧣", cat:"clothing" },
+    { id:12, name:{en:"Khadi Panjabi",bn:"খাদি পাঞ্জাবি"}, unit:{en:"each",bn:"প্রতিটি"}, price:1650, icon:"👘", cat:"clothing" }
+  ];
   const homepageSelectorById = {
     1:'#products .product-card:nth-child(1) .product-img',
     2:'#products .product-card:nth-child(2) .product-img',
@@ -94,5 +123,5 @@
     return matches.length ? matches[matches.length - 1][1] : '';
   }
 
-  window.QICMSRuntime = { imageSlots, applyImages, getSlotPreview, resolveUrl };
+  window.QICMSRuntime = { imageSlots, applyImages, getSlotPreview, resolveUrl, baseProducts, catTagMap, productCats };
 })();

@@ -33,7 +33,7 @@ module.exports = async (req, res) => {
       const existingFile = await getFile(CONTENT_PATH);
       const existing = existingFile
         ? JSON.parse(Buffer.from(existingFile.contentBase64, 'base64').toString('utf8'))
-        : { text: { en: {}, bn: {} }, images: {}, products: [] };
+        : { text: { en: {}, bn: {} }, images: {}, products: [], productOverrides: {} };
 
       const updated = {
         text: {
@@ -42,6 +42,7 @@ module.exports = async (req, res) => {
         },
         images: existing.images || {},
         products: existing.products || [],
+        productOverrides: existing.productOverrides || {},
         updatedAt: new Date().toISOString(),
       };
 

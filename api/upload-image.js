@@ -17,7 +17,7 @@ async function loadContent() {
   const file = await getFile(CONTENT_PATH);
   return file
     ? JSON.parse(Buffer.from(file.contentBase64, 'base64').toString('utf8'))
-    : { text: { en: {}, bn: {} }, images: {}, products: [] };
+    : { text: { en: {}, bn: {} }, images: {}, products: [], productOverrides: {} };
 }
 
 module.exports = async (req, res) => {
@@ -34,7 +34,7 @@ module.exports = async (req, res) => {
       const existing = await loadContent();
       const images = { ...(existing.images || {}) };
       delete images[safeSlot];
-      const updated = { text: existing.text || { en: {}, bn: {} }, images, products: existing.products || [], updatedAt: new Date().toISOString() };
+      const updated = { text: existing.text || { en: {}, bn: {} }, images, products: existing.products || [], productOverrides: existing.productOverrides || {}, updatedAt: new Date().toISOString() };
       const contentBase64 = Buffer.from(JSON.stringify(updated, null, 2)).toString('base64');
       await commitFiles(
         [{ path: CONTENT_PATH, contentBase64 }],
@@ -83,6 +83,7 @@ module.exports = async (req, res) => {
       text: existing.text || { en: {}, bn: {} },
       images: { ...(existing.images || {}), [safeSlot]: { path: `/${imagePath}`, v: version } },
       products: existing.products || [],
+      productOverrides: existing.productOverrides || {},
       updatedAt: new Date().toISOString(),
     };
     const contentBase64 = Buffer.from(JSON.stringify(updated, null, 2)).toString('base64');

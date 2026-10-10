@@ -122,8 +122,8 @@
 <script src="../cms-runtime.js"></script>
 <script>
 const sectionNames={brand:'Brand',nav:'Navigation',hero:'Home',about:'About',begin:'Beginning',land:'Our Land',agri:'Agriculture',river:'Pond & Nature',animals:'Animals',future:'Future Community',phil:'Meaning of Ihsan',store:'Store',products:'Products',journal:'Journal',gallery:'Gallery',tl:'Journey',contact:'Contact',scripture:'Quran & Hadith',footer:'Footer'};
-const state={mode:'text',section:'hero',lang:'en',query:'',server:{text:{en:{},bn:{}},images:{},products:[]},draft:{en:{},bn:{}},imageSection:'Home',defaults:{},defaultsReady:false};
-const productCats=[{v:'vegetables',l:'Vegetables & Fruits'},{v:'meat',l:'Meat & Eggs'},{v:'fish',l:'Fish'},{v:'groceries',l:'Groceries'},{v:'clothing',l:'Clothing'}];
+const state={mode:'text',section:'hero',lang:'en',query:'',server:{text:{en:{},bn:{}},images:{},products:[],productOverrides:{}},draft:{en:{},bn:{}},imageSection:'Home',defaults:{},defaultsReady:false,editingProductId:null};
+const productCats=(window.QICMSRuntime&&window.QICMSRuntime.productCats)||[{v:'vegetables',l:'Vegetables & Fruits'},{v:'meat',l:'Meat & Eggs'},{v:'fish',l:'Fish'},{v:'groceries',l:'Groceries'},{v:'clothing',l:'Clothing'}];
 const previewFrame=document.getElementById('previewFrame');
 let defaultsPromise=new Promise(resolve=>{
   previewFrame.addEventListener('load',()=>{
@@ -190,6 +190,7 @@ async function loadContent(){
     const data=await res.json();
     state.server=data;
     state.server.products=state.server.products||[];
+    state.server.productOverrides=state.server.productOverrides||{};
     state.draft={en:{...data.text.en},bn:{...data.text.bn}};
     renderNav();render();
   }catch(_){ area.innerHTML='<div class="panel"><div class="empty">Could not load content. Refresh and try again.</div></div>'; }
@@ -228,29 +229,46 @@ function renderImages(){
   if(!state.defaultsReady){area.innerHTML='<div class="panel"><div class="empty">Loading current pictures…</div></div>';defaultsPromise.then(()=>{if(state.mode==='images')renderImages()});return}
   area.innerHTML=`<div class="image-grid">${slots.map(slot=>{const override=state.server.images[slot.id];const overridden=!!override;const previewUrl=overridden?(typeof override==='string'?override:`${override.path}?v=${override.v||''}`):(state.defaults[slot.id]||'');return `<article class="image-card"><div class="image-preview" data-preview="${slot.id}" style="${previewUrl?`background-image:url('${previewUrl}')`:''}">${previewUrl?(overridden?`<span class="changed-badge">Changed</span>`:''):'No preview available'}</div><div class="image-body"><h3>${slot.label}</h3><p>${slot.section}</p><div class="image-actions"><label class="upload-label">Choose replacement<input type="file" accept="image/*" data-upload="${slot.id}"></label>${overridden?`<button class="restore-image" data-restore="${slot.id}" title="Restore original">↺</button>`:''}</div></div></article>`}).join('')}</div>`;
 }
+function mergedProducts(){
+  const overrides=state.server.productOverrides||{};
+  const base=((window.QICMSRuntime&&window.QICMSRuntime.baseProducts)||[]).map(p=>{
+    const o=overrides[String(p.id)];
+    return o?{id:p.id,name:o.name,desc:o.desc,unit:o.unit,price:o.price,cat:o.cat,isBase:true}:{id:p.id,name:p.name,desc:null,unit:p.unit,price:p.price,cat:p.cat,isBase:true};
+  });
+  const custom=(state.server.products||[]).map(p=>({...p,isBase:false}));
+  return [...base,...custom];
+}
+function findProduct(id){return mergedProducts().find(p=>String(p.id)===String(id))}
 function renderProducts(){
   document.getElementById('pageTitle').textContent='Store products';
-  document.getElementById('pageSub').textContent='Add new products to the store page, or remove ones you added.';
+  document.getElementById('pageSub').textContent='Edit any store product’s title, description, price, unit and category, or add a brand new one.';
   document.getElementById('langTabs').style.display='none';document.getElementById('saveText').style.display='none';document.querySelector('.search').style.display='none';
-  const list=state.server.products||[];
+  const list=mergedProducts();
   const catOptions=productCats.map(c=>`<option value="${c.v}">${c.l}</option>`).join('');
-  const formHtml=`<div class="product-form"><h2>Add a new product</h2><div class="form-grid">
-    <div><label>Title (English)</label><input id="pf-nameEn" placeholder="e.g. Fresh Guava"></div>
-    <div><label>Title (বাংলা)</label><input id="pf-nameBn" placeholder="যেমন: তাজা পেয়ারা"></div>
-    <div class="full"><label>Description (English)</label><textarea id="pf-descEn" placeholder="Short description"></textarea></div>
-    <div class="full"><label>Description (বাংলা)</label><textarea id="pf-descBn" placeholder="সংক্ষিপ্ত বিবরণ"></textarea></div>
-    <div><label>Price (৳)</label><input id="pf-price" type="number" min="1" step="1" placeholder="e.g. 250"></div>
+  const editing=state.editingProductId?findProduct(state.editingProductId):null;
+  const v=(val)=>val==null?'':val;
+  const formHtml=`<div class="product-form"><h2>${editing?'Edit product':'Add a new product'}</h2><div class="form-grid">
+    <div><label>Title (English)</label><input id="pf-nameEn" placeholder="e.g. Fresh Guava" value="${editing?escapeAttr(v(editing.name.en)):''}"></div>
+    <div><label>Title (বাংলা)</label><input id="pf-nameBn" placeholder="যেমন: তাজা পেয়ারা" value="${editing?escapeAttr(v(editing.name.bn)):''}"></div>
+    <div class="full"><label>Description (English)</label><textarea id="pf-descEn" placeholder="Short description">${editing&&editing.desc?escapeHtml(v(editing.desc.en)):''}</textarea></div>
+    <div class="full"><label>Description (বাংলা)</label><textarea id="pf-descBn" placeholder="সংক্ষিপ্ত বিবরণ">${editing&&editing.desc?escapeHtml(v(editing.desc.bn)):''}</textarea></div>
+    <div><label>Price (৳)</label><input id="pf-price" type="number" min="1" step="1" placeholder="e.g. 250" value="${editing?v(editing.price):''}"></div>
     <div><label>Category</label><select id="pf-cat">${catOptions}</select></div>
-    <div><label>Unit (English)</label><input id="pf-unitEn" placeholder="per kg / each"></div>
-    <div><label>Unit (বাংলা)</label><input id="pf-unitBn" placeholder="প্রতি কেজি / প্রতিটি"></div>
-    <div class="full"><label>Picture</label><input id="pf-image" type="file" accept="image/*"></div>
-  </div><div class="form-actions"><button class="btn" id="addProductBtn">Add product</button></div></div>`;
-  const listHtml=list.length?`<div class="product-list">${list.map(p=>{const img=p.image?`${p.image.path}${p.image.v?'?v='+p.image.v:''}`:'';return `<article class="product-card-admin"><div class="pv" style="${img?`background-image:url('${img}')`:''}">${img?'':'🛒'}</div><div class="pb"><h3>${p.name.en}</h3><p>${p.desc&&p.desc.en?p.desc.en:''}</p><div class="price">৳${p.price}</div><button class="delete-product" data-delete-product="${p.id}">Remove product</button></div></article>`}).join('')}</div>`:'<div class="panel"><div class="empty">No products added yet.</div></div>';
-  area.innerHTML=formHtml+listHtml;
+    <div><label>Unit (English)</label><input id="pf-unitEn" placeholder="per kg / each" value="${editing?escapeAttr(v(editing.unit.en)):''}"></div>
+    <div><label>Unit (বাংলা)</label><input id="pf-unitBn" placeholder="প্রতি কেজি / প্রতিটি" value="${editing?escapeAttr(v(editing.unit.bn)):''}"></div>
+    <div class="full"><label>Picture${editing?' (leave empty to keep current)':''}</label><input id="pf-image" type="file" accept="image/*"></div>
+  </div><div class="form-actions">${editing?'<button class="btn btn-soft" id="cancelEditBtn" type="button">Cancel</button>':''}<button class="btn" id="saveProductBtn">${editing?'Save changes':'Add product'}</button></div></div>`;
+  area.innerHTML=formHtml+`<div class="product-list">${list.map(p=>{
+    const img=p.isBase?(state.server.images&&state.server.images['store-product-'+p.id]?(typeof state.server.images['store-product-'+p.id]==='string'?state.server.images['store-product-'+p.id]:`${state.server.images['store-product-'+p.id].path}?v=${state.server.images['store-product-'+p.id].v||''}`):''):(p.image?`${p.image.path}${p.image.v?'?v='+p.image.v:''}`:'');
+    return `<article class="product-card-admin"><div class="pv" style="${img?`background-image:url('${img}')`:''}">${img?'':'🛒'}</div><div class="pb"><h3>${escapeHtml(p.name.en)}</h3><p>${p.desc&&p.desc.en?escapeHtml(p.desc.en):''}</p><div class="price">৳${p.price}</div><button class="btn btn-soft" data-edit-product="${p.id}" style="width:100%;margin-bottom:7px">Edit product</button>${p.isBase?'':`<button class="delete-product" data-delete-product="${p.id}">Remove product</button>`}</div></article>`;
+  }).join('')}</div>`;
+  const catSelect=document.getElementById('pf-cat');
+  if(catSelect&&editing)catSelect.value=editing.cat;
+  if(editing)document.querySelector('.product-form').scrollIntoView({behavior:'smooth',block:'start'});
 }
 function render(){if(state.mode==='text')renderText();else if(state.mode==='images')renderImages();else renderProducts()}
 
-document.querySelectorAll('.mode-btn').forEach(btn=>btn.addEventListener('click',()=>{state.mode=btn.dataset.mode;document.querySelectorAll('.mode-btn').forEach(x=>x.classList.toggle('active',x===btn));state.query='';search.value='';document.querySelector('.search').style.display='';renderNav();render()}));
+document.querySelectorAll('.mode-btn').forEach(btn=>btn.addEventListener('click',()=>{state.mode=btn.dataset.mode;state.editingProductId=null;document.querySelectorAll('.mode-btn').forEach(x=>x.classList.toggle('active',x===btn));state.query='';search.value='';document.querySelector('.search').style.display='';renderNav();render()}));
 nav.addEventListener('click',e=>{const btn=e.target.closest('[data-section]');if(!btn)return;if(state.mode==='text')state.section=btn.dataset.section;else state.imageSection=btn.dataset.section;renderNav();render()});
 document.getElementById('langTabs').addEventListener('click',e=>{const btn=e.target.closest('[data-lang]');if(!btn)return;state.lang=btn.dataset.lang;document.querySelectorAll('.lang-tab').forEach(x=>x.classList.toggle('active',x===btn));renderText()});
 search.addEventListener('input',()=>{state.query=search.value.trim().toLowerCase();render()});
@@ -279,18 +297,21 @@ area.addEventListener('change', async e=>{
 });
 
 area.addEventListener('click', async e=>{
-  const addBtn=e.target.closest('#addProductBtn');
-  if(addBtn){
+  const saveBtn=e.target.closest('#saveProductBtn');
+  if(saveBtn){
     const nameEn=document.getElementById('pf-nameEn').value.trim();
     const price=document.getElementById('pf-price').value;
     const cat=document.getElementById('pf-cat').value;
     if(!nameEn||!price){toast('Title and price are required.',true);return}
-    addBtn.disabled=true;addBtn.textContent='Adding…';
+    const editingId=state.editingProductId;
+    const busyLabel=editingId?'Saving…':'Adding…';
+    const doneLabel=editingId?'Save changes':'Add product';
+    saveBtn.disabled=true;saveBtn.textContent=busyLabel;
     try{
       const fileInput=document.getElementById('pf-image');
       let dataUrl=null;
       if(fileInput.files[0]){
-        if(fileInput.files[0].size>4.5*1024*1024){toast('Please choose an image under 4MB.',true);addBtn.disabled=false;addBtn.textContent='Add product';return}
+        if(fileInput.files[0].size>4.5*1024*1024){toast('Please choose an image under 4MB.',true);saveBtn.disabled=false;saveBtn.textContent=doneLabel;return}
         dataUrl=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(fileInput.files[0])});
       }
       const payload={
@@ -299,18 +320,38 @@ area.addEventListener('click', async e=>{
         unitEn:document.getElementById('pf-unitEn').value.trim(), unitBn:document.getElementById('pf-unitBn').value.trim(),
         price, cat, dataUrl
       };
-      const res=await fetch('/api/products',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      if(editingId) payload.id=editingId;
+      const res=await fetch('/api/products',{method:editingId?'PUT':'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
       const data=await res.json();
-      if(!res.ok) throw new Error(data.error||'Could not add product');
-      state.server.products=[...(state.server.products||[]),data.product];
-      toast('Product added — live in about 15–20 seconds.');
+      if(!res.ok) throw new Error(data.error||'Could not save product');
+      if(editingId){
+        const isCustom=String(editingId).indexOf('custom-')===0;
+        if(isCustom){
+          state.server.products=(state.server.products||[]).map(p=>p.id===editingId?data.product:p);
+        }else{
+          state.server.productOverrides=state.server.productOverrides||{};
+          state.server.productOverrides[String(editingId).replace(/[^0-9]/g,'')]=data.override;
+          if(dataUrl){
+            state.server.images=state.server.images||{};
+          }
+        }
+        state.editingProductId=null;
+        toast('Product saved — live in about 15–20 seconds.');
+      }else{
+        state.server.products=[...(state.server.products||[]),data.product];
+        toast('Product added — live in about 15–20 seconds.');
+      }
       renderProducts();
     }catch(err){
-      toast('Could not add product: '+err.message, true);
-      addBtn.disabled=false;addBtn.textContent='Add product';
+      toast('Could not save product: '+err.message, true);
+      saveBtn.disabled=false;saveBtn.textContent=doneLabel;
     }
     return;
   }
+  const cancelBtn=e.target.closest('#cancelEditBtn');
+  if(cancelBtn){ state.editingProductId=null; renderProducts(); return; }
+  const editProduct=e.target.closest('[data-edit-product]');
+  if(editProduct){ state.editingProductId=editProduct.dataset.editProduct; renderProducts(); return; }
   const delProduct=e.target.closest('[data-delete-product]');
   if(delProduct){
     if(!confirm('Remove this product from the store page?'))return;
