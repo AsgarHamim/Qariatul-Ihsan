@@ -89,4 +89,21 @@ async function commitFiles(files, message) {
   return newCommit;
 }
 
-module.exports = { getFile, putFile, commitFiles };
+async function listDir(dirPath) {
+  const { repo, branch } = getConfig();
+  try {
+    const data = await gh(`/repos/${repo}/contents/${dirPath}?ref=${branch}`);
+    return Array.isArray(data) ? data.filter((x) => x.type === 'file') : [];
+  } catch (err) {
+    if (err.status === 404) return [];
+    throw err;
+  }
+}
+
+async function getBlobBase64(sha) {
+  const { repo } = getConfig();
+  const data = await gh(`/repos/${repo}/git/blobs/${sha}`);
+  return data.content.replace(/\n/g, '');
+}
+
+module.exports = { getFile, putFile, commitFiles, listDir, getBlobBase64 };

@@ -123,5 +123,7 @@
     return matches.length ? matches[matches.length - 1][1] : '';
   }
 
-  window.QICMSRuntime = { imageSlots, applyImages, getSlotPreview, resolveUrl, baseProducts, catTagMap, productCats };
+  const api = { imageSlots, applyImages, getSlotPreview, resolveUrl, baseProducts, catTagMap, productCats };
+  if (typeof window !== 'undefined') window.QICMSRuntime = api;
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })();

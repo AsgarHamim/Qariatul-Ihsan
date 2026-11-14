@@ -406,8 +406,94 @@
   }
   .checkout-btn:hover{background:var(--forest-light);}
 
+  /* ---------- Checkout ---------- */
+  .checkout-btn:disabled{background:#B9B39F; cursor:not-allowed;}
+  .co-modal{
+    position:fixed; inset:0; z-index:120;
+    background:rgba(22,30,22,0.55);
+    overflow-y:auto; -webkit-overflow-scrolling:touch;
+    padding:28px 16px;
+    display:none;
+  }
+  .co-modal.open{display:block;}
+  .co-sheet{
+    position:relative;
+    max-width:980px; margin:0 auto;
+    background:var(--linen);
+    border-radius:6px;
+    padding:30px 30px 34px;
+    box-shadow:0 20px 60px rgba(0,0,0,.28);
+  }
+  .co-close{
+    position:absolute; top:10px; right:14px;
+    background:none; border:none; font-size:30px; line-height:1;
+    color:var(--ink-soft); cursor:pointer; padding:4px 8px;
+  }
+  .co-sheet h2{margin:0 0 4px; font-size:26px; color:var(--forest);}
+  .co-sub{margin:0 0 22px; color:var(--ink-soft); font-size:14px;}
+  .co-layout{display:grid; grid-template-columns:1.25fr 1fr; gap:28px; align-items:start;}
+  .co-form{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .co-field{display:flex; flex-direction:column; gap:5px; min-width:0;}
+  .co-field.full{grid-column:1/-1;}
+  .co-field label{font-size:12.5px; font-weight:600; color:var(--ink-soft);}
+  .co-field label i{font-style:normal; font-weight:400; color:#8a846f;}
+  .co-field input,.co-field textarea{
+    width:100%; font:inherit; font-size:14.5px; color:var(--ink);
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:10px 12px;
+  }
+  .co-field textarea{min-height:76px; resize:vertical;}
+  .co-field input:focus,.co-field textarea:focus{outline:2px solid var(--gold); outline-offset:0; border-color:var(--gold);}
+  .co-field.err input,.co-field.err textarea{border-color:var(--rust);}
+  .co-field .msg{font-size:12px; color:var(--rust); display:none;}
+  .co-field.err .msg{display:block;}
+  .co-pay{
+    grid-column:1/-1;
+    border:1.5px solid var(--forest); background:var(--forest-pale);
+    border-radius:var(--radius); padding:12px 14px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .co-pay .dot{width:18px; height:18px; border-radius:50%; border:5px solid var(--forest); background:#fff; flex-shrink:0;}
+  .co-pay b{display:block; font-size:14.5px; color:var(--forest);}
+  .co-pay span{font-size:12.5px; color:var(--ink-soft);}
+  .co-error{grid-column:1/-1; margin:0; color:var(--rust); font-size:13.5px; display:none;}
+  .co-error.show{display:block;}
+  .co-hp{position:absolute; left:-9999px; width:1px; height:1px; opacity:0;}
+  .co-submit{grid-column:1/-1;}
+  .co-summary{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:18px; position:sticky; top:12px;
+  }
+  .co-summary h3{margin:0 0 10px; font-size:16px; font-family:'Fraunces',serif; font-weight:500; color:var(--forest);}
+  .co-line{display:flex; justify-content:space-between; gap:12px; padding:8px 0; border-bottom:1px solid var(--line); font-size:13.5px;}
+  .co-line small{display:block; color:var(--ink-soft); font-size:12px;}
+  .co-line b{white-space:nowrap; color:var(--gold);}
+  .co-tot{display:flex; justify-content:space-between; padding:6px 0 0; font-size:14px;}
+  .co-tot.grand{margin-top:8px; padding-top:12px; border-top:2px solid var(--forest); font-weight:700; font-size:17px; color:var(--forest);}
+  .co-success{
+    display:flex; align-items:center; gap:14px;
+    background:var(--forest-pale); border:1px solid #b9cdbb; border-radius:var(--radius);
+    padding:14px 16px; margin-bottom:20px; color:var(--forest);
+  }
+  .co-success .tick{
+    width:38px; height:38px; border-radius:50%; background:var(--forest); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0;
+  }
+  .co-success b{display:block; font-size:16px;}
+  .co-success span{font-size:13px; color:var(--ink-soft);}
+  .co-actions{display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:22px;}
+  .co-actions button{
+    padding:12px 22px; border-radius:var(--radius); font-size:14.5px; font-weight:600; cursor:pointer;
+    border:1.5px solid var(--forest); background:var(--forest); color:#FBF7EC;
+  }
+  .co-actions button.alt{background:transparent; color:var(--forest);}
+  body.co-open{overflow:hidden;}
+  @media print{.co-sheet{background:#fff!important;padding:0!important;box-shadow:none!important;border-radius:0!important;max-width:none!important}}
+
   /* ---------- Responsive ---------- */
   @media (max-width:920px){
+    .co-layout{grid-template-columns:1fr;}
+    .co-summary{position:static; order:-1;}
     .product-grid{grid-template-columns:repeat(2, 1fr);}
     nav.main-nav{display:none;}
     .mobile-toggle{display:flex;}
@@ -417,6 +503,9 @@
     .control label{display:none;}
   }
   @media (max-width:560px){
+    .co-modal{padding:0;}
+    .co-sheet{border-radius:0; padding:54px 16px 28px; min-height:100%;}
+    .co-form{grid-template-columns:1fr;}
     .product-grid{grid-template-columns:1fr;}
     .header-inner{padding:14px 18px;}
     .logo{font-size:16px;gap:8px;}
@@ -542,11 +631,45 @@
       <span data-i18n="cart.subtotal">Subtotal</span>
       <strong id="subtotal">৳0</strong>
     </div>
-    <button class="checkout-btn" data-i18n="cart.checkout">Proceed to checkout</button>
+    <button class="checkout-btn" id="checkoutBtn" data-i18n="cart.checkout">Proceed to checkout</button>
   </div>
 </aside>
 
+<div class="co-modal qi-print-root" id="coModal" role="dialog" aria-modal="true" aria-labelledby="coTitle">
+  <div class="co-sheet">
+    <button class="co-close qi-no-print" id="coClose" type="button" aria-label="Close">&times;</button>
+    <div id="coFormView">
+      <h2 id="coTitle" data-i18n="co.title">Checkout</h2>
+      <p class="co-sub" data-i18n="co.sub">Tell us where to deliver. You pay in cash when your order arrives.</p>
+      <div class="co-layout">
+        <form class="co-form" id="coForm" novalidate autocomplete="on">
+          <div class="co-field" data-f="name"><label for="coName" data-i18n="co.name">Full name</label><input id="coName" name="name" autocomplete="name" maxlength="80"><span class="msg"></span></div>
+          <div class="co-field" data-f="phone"><label for="coPhone" data-i18n="co.phone">Mobile number</label><input id="coPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" data-i18n-ph="co.phonePh" placeholder="01XXXXXXXXX"><span class="msg"></span></div>
+          <div class="co-field" data-f="email"><label for="coEmail"><span data-i18n="co.email">Email</span> <i data-i18n="co.optional">(optional)</i></label><input id="coEmail" name="email" type="email" autocomplete="email" maxlength="120"><span class="msg"></span></div>
+          <div class="co-field" data-f="city"><label for="coCity" data-i18n="co.city">City / Area</label><input id="coCity" name="city" autocomplete="address-level2" maxlength="80"><span class="msg"></span></div>
+          <div class="co-field full" data-f="address"><label for="coAddress" data-i18n="co.address">Full delivery address</label><textarea id="coAddress" name="address" autocomplete="street-address" maxlength="300" data-i18n-ph="co.addressPh" placeholder="House, road, area, landmark"></textarea><span class="msg"></span></div>
+          <div class="co-field full" data-f="notes"><label for="coNotes"><span data-i18n="co.notes">Order notes</span> <i data-i18n="co.optional">(optional)</i></label><textarea id="coNotes" name="notes" maxlength="300"></textarea></div>
+          <div class="co-pay"><div class="dot"></div><div><b data-i18n="co.cod">Cash on Delivery</b><span data-i18n="co.codSub">Pay in cash to our delivery person when your order arrives.</span></div></div>
+          <input class="co-hp" type="text" name="website" id="coHp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <p class="co-error" id="coError"></p>
+          <button class="checkout-btn co-submit" id="coSubmit" type="submit" data-i18n="co.confirm">Confirm order</button>
+        </form>
+        <aside class="co-summary" id="coSummary"></aside>
+      </div>
+    </div>
+    <div id="coInvoiceView" hidden>
+      <div class="co-success qi-no-print"><div class="tick">✓</div><div><b data-i18n="co.done">Order confirmed!</b><span data-i18n="co.doneSub">We will call you shortly to confirm delivery. Your invoice is below.</span></div></div>
+      <div id="coInvoice"></div>
+      <div class="co-actions qi-no-print">
+        <button type="button" id="coPrint" data-i18n="co.print">Print / Save as PDF</button>
+        <button type="button" class="alt" id="coDone" data-i18n="co.continue">Continue shopping</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="../cms-runtime.js"></script>
+<script src="../invoice.js"></script>
 <script>
 const dict = {
   en:{
@@ -558,7 +681,9 @@ const dict = {
     "perPage.6":"6 per page","perPage.9":"9 per page","perPage.12":"12 per page",
     "cart.open":"Open cart","cart.close":"Close cart","cart.title":"Your cart","cart.subtotal":"Subtotal","cart.checkout":"Proceed to checkout","cart.empty":"Your cart is empty.","cart.emptySub":"Add something grown or made with care.","cart.remove":"Remove",
     "product.add":"Add to cart","product.added":"Added ✓","qty.decrease":"Decrease quantity","qty.increase":"Increase quantity",
-    "empty.title":"No products here yet","empty.body":"Try a different category — more from the land is on its way.","page.previous":"← Previous","page.next":"Next →"
+    "empty.title":"No products here yet","empty.body":"Try a different category — more from the land is on its way.","page.previous":"← Previous","page.next":"Next →",
+    "co.title":"Checkout","co.sub":"Tell us where to deliver. You pay in cash when your order arrives.","co.name":"Full name","co.phone":"Mobile number","co.phonePh":"01XXXXXXXXX","co.email":"Email","co.optional":"(optional)","co.city":"City / Area","co.address":"Full delivery address","co.addressPh":"House, road, area, landmark","co.notes":"Order notes","co.cod":"Cash on Delivery","co.codSub":"Pay in cash to our delivery person when your order arrives.","co.confirm":"Confirm order","co.placing":"Placing order…","co.summary":"Order summary","co.subtotal":"Subtotal","co.delivery":"Delivery charge","co.free":"Free","co.total":"Total payable","co.done":"Order confirmed!","co.doneSub":"We will call you shortly to confirm delivery. Your invoice is below.","co.print":"Print / Save as PDF","co.continue":"Continue shopping",
+    "err.name":"Please enter your full name.","err.phone":"Enter a valid Bangladeshi mobile number (01XXXXXXXXX).","err.email":"Enter a valid email address.","err.city":"Please enter your city or area.","err.address":"Please enter a complete delivery address.","err.items":"Some items are no longer available. Please review your cart.","err.empty":"Your cart is empty.","err.server":"Could not place your order. Please try again or call 01715-004251."
   },
   bn:{
     "title":"দোকান — কারিয়াতুল ইহসান",
@@ -569,7 +694,9 @@ const dict = {
     "perPage.6":"প্রতি পাতায় ৬টি","perPage.9":"প্রতি পাতায় ৯টি","perPage.12":"প্রতি পাতায় ১২টি",
     "cart.open":"কার্ট খুলুন","cart.close":"কার্ট বন্ধ করুন","cart.title":"আপনার কার্ট","cart.subtotal":"মোট","cart.checkout":"চেকআউট করুন","cart.empty":"আপনার কার্ট খালি।","cart.emptySub":"যত্নে উৎপাদিত বা তৈরি কোনো পণ্য যোগ করুন।","cart.remove":"সরান",
     "product.add":"কার্টে যোগ করুন","product.added":"যোগ হয়েছে ✓","qty.decrease":"পরিমাণ কমান","qty.increase":"পরিমাণ বাড়ান",
-    "empty.title":"এখানে এখনো কোনো পণ্য নেই","empty.body":"অন্য বিভাগ দেখুন — জমি থেকে আরও পণ্য শিগগিরই আসছে।","page.previous":"← আগের পাতা","page.next":"পরের পাতা →"
+    "empty.title":"এখানে এখনো কোনো পণ্য নেই","empty.body":"অন্য বিভাগ দেখুন — জমি থেকে আরও পণ্য শিগগিরই আসছে।","page.previous":"← আগের পাতা","page.next":"পরের পাতা →",
+    "co.title":"চেকআউট","co.sub":"কোথায় ডেলিভারি দেব জানান। অর্ডার হাতে পেয়ে নগদে টাকা দেবেন।","co.name":"পূর্ণ নাম","co.phone":"মোবাইল নম্বর","co.phonePh":"01XXXXXXXXX","co.email":"ইমেইল","co.optional":"(ঐচ্ছিক)","co.city":"শহর / এলাকা","co.address":"ডেলিভারির পূর্ণ ঠিকানা","co.addressPh":"বাড়ি, রাস্তা, এলাকা, কাছের পরিচিত স্থান","co.notes":"অর্ডারের নোট","co.cod":"ক্যাশ অন ডেলিভারি","co.codSub":"অর্ডার হাতে পেয়ে ডেলিভারি ব্যক্তির কাছে নগদে টাকা দিন।","co.confirm":"অর্ডার নিশ্চিত করুন","co.placing":"অর্ডার হচ্ছে…","co.summary":"অর্ডারের সারাংশ","co.subtotal":"সাবটোটাল","co.delivery":"ডেলিভারি চার্জ","co.free":"বিনামূল্যে","co.total":"সর্বমোট প্রদেয়","co.done":"অর্ডার নিশ্চিত হয়েছে!","co.doneSub":"ডেলিভারি নিশ্চিত করতে আমরা শিগগিরই ফোন করব। আপনার ইনভয়েস নিচে।","co.print":"প্রিন্ট / PDF সেভ করুন","co.continue":"কেনাকাটা চালিয়ে যান",
+    "err.name":"আপনার পূর্ণ নাম লিখুন।","err.phone":"সঠিক মোবাইল নম্বর দিন (01XXXXXXXXX)।","err.email":"সঠিক ইমেইল ঠিকানা দিন।","err.city":"আপনার শহর বা এলাকা লিখুন।","err.address":"ডেলিভারির সম্পূর্ণ ঠিকানা লিখুন।","err.items":"কিছু পণ্য আর পাওয়া যাচ্ছে না। কার্ট দেখে নিন।","err.empty":"আপনার কার্ট খালি।","err.server":"অর্ডার করা যায়নি। আবার চেষ্টা করুন বা 01715-004251 এ ফোন করুন।"
   }
 };
 
@@ -599,6 +726,7 @@ let state = { filter:"all", sort:"featured", perPage:6, page:1, qty:{}, cart:{} 
 products.forEach(p => state.qty[p.id] = 1);
 
 let storeImageOverrides = {};
+let deliveryFee = 0;
 const catTagMap = {
   vegetables:{en:'Vegetables & Fruits',bn:'শাকসবজি ও ফল'},
   meat:{en:'Meat & Eggs',bn:'মাংস ও ডিম'},
@@ -620,6 +748,7 @@ const catTagMap = {
       }
     });
     storeImageOverrides = next;
+    deliveryFee = Math.max(0, Number(content && content.settings && content.settings.deliveryFee) || 0);
 
     const productOverrides = (content && content.productOverrides) || {};
     products.forEach(p=>{
@@ -751,12 +880,12 @@ function render(){
 grid.addEventListener('click', (e) => {
   const btn = e.target.closest('button[data-action]');
   if(!btn) return;
-  const id = Number(btn.dataset.id);
+  const id = btn.dataset.id;
   const action = btn.dataset.action;
   if(action === 'inc'){ state.qty[id]++; render(); }
   if(action === 'dec'){ if(state.qty[id] > 1){ state.qty[id]--; render(); } }
   if(action === 'add'){
-    const p = products.find(p => p.id === id);
+    const p = products.find(p => String(p.id) === id);
     const qty = state.qty[id];
     state.cart[id] = (state.cart[id] || 0) + qty;
     state.qty[id] = 1;
@@ -805,6 +934,7 @@ function renderCart(){
   const count = ids.reduce((sum, id) => sum + state.cart[id], 0);
   badge.hidden = count === 0;
   badge.textContent = count;
+  document.getElementById('checkoutBtn').disabled = count === 0;
 
   const container = document.getElementById('drawerItems');
   if(!ids.length){
@@ -841,6 +971,151 @@ function renderCart(){
   });
 }
 
+
+let lastOrder = null;
+const coModal = document.getElementById('coModal');
+const coForm = document.getElementById('coForm');
+const coError = document.getElementById('coError');
+const coSubmit = document.getElementById('coSubmit');
+let coBusy = false;
+
+function cartLines(){
+  return Object.keys(state.cart).filter(id => state.cart[id] > 0).map(id => {
+    const p = products.find(p => String(p.id) === String(id));
+    return p ? { p, qty: state.cart[id] } : null;
+  }).filter(Boolean);
+}
+
+function renderCheckoutSummary(){
+  const box = document.getElementById('coSummary');
+  const lines = cartLines();
+  let subtotal = 0;
+  const rows = lines.map(({p, qty}) => {
+    subtotal += p.price * qty;
+    return `<div class="co-line"><div>${productText(p,'name')}<small>${currentLang==='bn'?bnDigits(qty):qty} × ${fmt(p.price)} · ${productText(p,'unit')}</small></div><b>${fmt(p.price*qty)}</b></div>`;
+  }).join('');
+  box.innerHTML = `<h3>${t('co.summary')}</h3>${rows}
+    <div class="co-tot"><span>${t('co.subtotal')}</span><span>${fmt(subtotal)}</span></div>
+    <div class="co-tot"><span>${t('co.delivery')}</span><span>${deliveryFee>0?fmt(deliveryFee):t('co.free')}</span></div>
+    <div class="co-tot grand"><span>${t('co.total')}</span><span>${fmt(subtotal+deliveryFee)}</span></div>`;
+}
+
+function showInvoice(order){
+  QIInvoice.ensureStyles();
+  document.getElementById('coInvoice').innerHTML = QIInvoice.html(order, currentLang);
+  document.getElementById('coFormView').hidden = true;
+  document.getElementById('coInvoiceView').hidden = false;
+}
+
+function openCheckout(){
+  if(!cartLines().length) return;
+  closeDrawer();
+  lastOrder = null;
+  document.getElementById('coFormView').hidden = false;
+  document.getElementById('coInvoiceView').hidden = true;
+  clearCoErrors();
+  try{
+    const saved = JSON.parse(localStorage.getItem('qi-customer') || '{}');
+    ['name','phone','email','city','address'].forEach(k => {
+      const el = coForm.elements[k];
+      if(el && !el.value && saved[k]) el.value = saved[k];
+    });
+  }catch(_){}
+  renderCheckoutSummary();
+  coModal.classList.add('open');
+  document.body.classList.add('co-open');
+  coModal.scrollTop = 0;
+}
+
+function closeCheckout(){
+  if(coBusy) return;
+  coModal.classList.remove('open');
+  document.body.classList.remove('co-open');
+  lastOrder = null;
+}
+
+function clearCoErrors(){
+  coForm.querySelectorAll('.co-field').forEach(f => f.classList.remove('err'));
+  coError.classList.remove('show');
+  coError.textContent = '';
+}
+
+function setFieldError(name){
+  const f = coForm.querySelector(`.co-field[data-f="${name}"]`);
+  if(!f) return false;
+  f.classList.add('err');
+  f.querySelector('.msg').textContent = t('err.'+name);
+  const input = f.querySelector('input,textarea');
+  if(input) input.focus();
+  return true;
+}
+
+function toEnDigits(s){ return String(s||'').replace(/[০-৯]/g, d => '০১২৩৪৫৬৭৮৯'.indexOf(d)); }
+
+function validateCheckout(){
+  clearCoErrors();
+  const v = n => coForm.elements[n].value.trim();
+  const checks = [
+    ['name', v('name').length >= 2],
+    ['phone', /^(?:\+?88)?01[3-9]\d{8}$/.test(toEnDigits(v('phone')).replace(/[\s-]/g,''))],
+    ['email', !v('email') || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email'))],
+    ['city', v('city').length >= 2],
+    ['address', v('address').length >= 8]
+  ];
+  const bad = checks.filter(c => !c[1]).map(c => c[0]);
+  bad.forEach(n => { const f = coForm.querySelector(`.co-field[data-f="${n}"]`); f.classList.add('err'); f.querySelector('.msg').textContent = t('err.'+n); });
+  if(bad.length){ const first = coForm.querySelector(`.co-field[data-f="${bad[0]}"] input, .co-field[data-f="${bad[0]}"] textarea`); if(first) first.focus(); return false; }
+  return true;
+}
+
+coForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if(coBusy) return;
+  if(!validateCheckout()) return;
+  const lines = cartLines();
+  if(!lines.length){ coError.textContent = t('err.empty'); coError.classList.add('show'); return; }
+  const v = n => coForm.elements[n].value.trim();
+  const customer = { name:v('name'), phone:toEnDigits(v('phone')).replace(/[\s-]/g,''), email:v('email'), city:v('city'), address:v('address'), notes:v('notes') };
+  coBusy = true;
+  coSubmit.disabled = true;
+  coSubmit.textContent = t('co.placing');
+  try{
+    const res = await fetch('/api/orders', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ customer, items: lines.map(l => ({ id:String(l.p.id), qty:l.qty })), lang: currentLang, website: document.getElementById('coHp').value })
+    });
+    const data = await res.json().catch(() => ({}));
+    if(!res.ok || !data.order){
+      const key = data && data.field ? data.field : 'server';
+      if(['name','phone','email','city','address'].indexOf(key) > -1){ setFieldError(key); }
+      else { coError.textContent = t(key === 'items' ? 'err.items' : key === 'empty' ? 'err.empty' : 'err.server'); coError.classList.add('show'); }
+      return;
+    }
+    try{ localStorage.setItem('qi-customer', JSON.stringify({ name:customer.name, phone:customer.phone, email:customer.email, city:customer.city, address:customer.address })); }catch(_){}
+    lastOrder = data.order;
+    state.cart = {};
+    renderCart();
+    coForm.elements.notes.value = '';
+    showInvoice(lastOrder);
+    coModal.scrollTop = 0;
+  }catch(_){
+    coError.textContent = t('err.server');
+    coError.classList.add('show');
+  }finally{
+    coBusy = false;
+    coSubmit.disabled = false;
+    coSubmit.textContent = t('co.confirm');
+  }
+});
+
+document.getElementById('checkoutBtn').addEventListener('click', openCheckout);
+document.getElementById('coClose').addEventListener('click', closeCheckout);
+document.getElementById('coDone').addEventListener('click', closeCheckout);
+document.getElementById('coPrint').addEventListener('click', () => QIInvoice.print());
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && coModal.classList.contains('open')) closeCheckout(); });
+coForm.addEventListener('input', (e) => { const f = e.target.closest('.co-field'); if(f) f.classList.remove('err'); });
+
 function setLang(lang){
   currentLang = lang === 'bn' ? 'bn' : 'en';
   document.documentElement.setAttribute('lang',currentLang);
@@ -848,10 +1123,13 @@ function setLang(lang){
   document.title = t('title');
   document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent=t(el.dataset.i18n); });
   document.querySelectorAll('[data-i18n-aria]').forEach(el=>{ el.setAttribute('aria-label',t(el.dataset.i18nAria)); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{ el.setAttribute('placeholder',t(el.dataset.i18nPh)); });
   document.querySelectorAll('[data-setlang]').forEach(btn=>btn.classList.toggle('active',btn.dataset.setlang===currentLang));
   localStorage.setItem('qi-lang',currentLang);
   render();
   renderCart();
+  if(typeof renderCheckoutSummary==='function') renderCheckoutSummary();
+  if(lastOrder && typeof showInvoice==='function') showInvoice(lastOrder);
 }
 document.querySelectorAll('[data-setlang]').forEach(btn=>btn.addEventListener('click',()=>setLang(btn.dataset.setlang)));
 setLang(currentLang);
